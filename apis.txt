@@ -1,0 +1,5 @@
+Link to all CDC datasets:
+https://data.cdc.gov/browse
+
+"United States COVID-19 Community Levels by County as Originally Posted"
+https://data.cdc.gov/resource/3nnm-4jni.json

@@ -1,5 +1,27 @@
 # a99 Final Project
 
+## Project Goal
+
+Create a dashboard with options to view COVID data trends. 
+
+Include:
+    Select state and view compared to national average 
+    Select county and view compared to state and national average
+    View vaccination trends by state and county
+    Create graphs to display above data
+
+Advanced (ideally include if we have the bandwith):
+    Create heat map of which counties/states are most impacted by COVID (i.e. cases/100k people)
+
+Suggested:
+    Create module to automatically update all datasets. 
+
+To access APIs, please refer to apis.txt.
+
+We will update our databases at midnight each night using npm node-schedule.
+
+NOTE: to avoid adding data that is already accounted for, we need to check the date of each data point, compare that to the dates in our dataset -> add if unaccounted. 
+
 ## UPDATE
 
 You don't need to accept this assignment since you are already assigned to teams. So, there is not assignment invite link for a99.
