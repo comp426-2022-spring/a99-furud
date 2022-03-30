@@ -6,6 +6,9 @@ const app = express()
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 let XMLHttpRequest = require('xhr2')
+const { JSDOM } = require( "jsdom" );
+const { window } = new JSDOM( "" );
+const $ = require( "jquery" )( window );
 let request = new XMLHttpRequest()
 
 var port = args.port || 3000
@@ -15,13 +18,17 @@ const server = app.listen(port, (req, res) => {
 })
 
 app.get('/covid_deaths', (req, res) => {
-    fetch('https://data.cdc.gov/resource/9bhg-hcku.json')
-        .then(response => {
-            return response.json()
-        })
-        .then(users => {
-            console.log(users)
-        })
+    $.ajax({
+        url: 'https://data.cdc.gov/resource/9bhg-hcku.json',
+        type: 'GET',
+        data: {
+            "$limit": 500,
+            "$app_token": 'LkodRSqKWrJ9i691KYiUPv9oG'
+        }
+    }).done(function(data) {
+        alert("retrieved " + data.length + " records from dataset")
+        console.log(data.length)
+    })
     // jsonfile.readFile(file, function (err, obj) {
     //     if (err) {
     //         console.log(err)

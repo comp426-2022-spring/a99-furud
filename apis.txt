@@ -1,3 +1,6 @@
+CDC App Token:
+LkodRSqKWrJ9i691KYiUPv9oG
+
 Link to all CDC datasets:
 https://data.cdc.gov/browse
 

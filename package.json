@@ -28,8 +28,11 @@
   "dependencies": {
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
+    "jquery": "^3.6.0",
+    "jsdom": "^19.0.0",
     "jsonfile": "^6.1.0",
     "minimist": "^1.2.6",
+    "node-fetch": "^3.2.3",
     "xhr2": "^0.2.1"
   }
 }
