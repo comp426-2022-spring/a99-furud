@@ -5,16 +5,18 @@
 Create a dashboard with options to view COVID data trends. 
 
 Include:
-    Select state and view compared to national average 
-    Select county and view compared to state and national average
-    View vaccination trends by state and county
-    Create graphs to display above data
+- Select state and view cases/100k compared to national average 
+- Select county and view cases/100k compared to state and national average
+- View vaccination trends by state and county
+- View deaths by state and county
+- View hospital rates (e.g. % of beds occupied by COVID patients, cases that- lead to hospitilization) by state and county
+- Create graphs to display above data over time
 
 Advanced (ideally include if we have the bandwith):
-    Create heat map of which counties/states are most impacted by COVID (i.e. cases/100k people)
+ - Create heat map of which counties/states are most impacted by COVID (i.e. - cases/100k people)
 
-Suggested:
-    Create module to automatically update all datasets. 
+Suggested methods:
+ - Create module to automatically update all datasets. 
 
 To access APIs, please refer to apis.txt.
 
