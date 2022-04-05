@@ -38,6 +38,10 @@ app.get('/db_populate.js', (req, res) => {
     res.status(200).send(db_populate.covid_deaths_db())
 })
 
+app.get('/deaths_over_time', (req, res) => {
+    res.status(200).send(db_populate.covid_deaths_over_time())
+})
+
 app.use(function(req, res) {
     res.status(404).send('404 Page Not Found')
 })
