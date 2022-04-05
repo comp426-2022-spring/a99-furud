@@ -107,7 +107,9 @@ function covid_deaths_over_time() {
         stmt = deaths_over_time_db.prepare('SELECT sub_date FROM covid_deaths_over_time ORDER BY sub_date LIMIT 1')
         last_date = stmt.get()
         $.ajax({
-            url: "https://data.cdc.gov/resource/9mfq-cb36.json?submission_date=" + last_date,
+            //need to edit the api url to filter results after submission_date
+            //if we cannot figure out how to filter results by url, we can brute force and make a call for each day since last import into database
+            url: "https://data.cdc.gov/resource/9mfq-cb36.json?submission_date=" + last_date, 
             type: "GET",
             data: {
                 "$limit" : 100000,
