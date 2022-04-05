@@ -4,7 +4,7 @@ const args = require('minimist')(process.argv.slice(0))
 const app = express()
 const fs = require('fs')
 const jsonfile = require('jsonfile')
-
+const db_populate = require('./db_populate.js')
 const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
@@ -32,6 +32,10 @@ app.get('/covid_deaths/', (req, res) => {
     });
 
     res.status(200).send("Successfully retrieved dataset!")
+})
+
+app.get('/db_populate.js', (req, res) => {
+    res.status(200).send(db_populate.covid_deaths_db())
 })
 
 app.use(function(req, res) {
