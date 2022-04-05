@@ -1,13 +1,12 @@
 const express = require('express')
-const { fstat } = require('fs')
 const args = require('minimist')(process.argv.slice(0))
 const app = express()
 const fs = require('fs')
-const jsonfile = require('jsonfile')
 const db_populate = require('./db_populate.js')
 const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
+const get_data = require('./data.js')
 
 var port = args.port || 3000
 
@@ -16,22 +15,7 @@ const server = app.listen(port, (req, res) => {
 })
 
 app.get('/covid_deaths/', (req, res) => {
-
-    $.ajax({ // fetches dataset from the CDC website and saves it as a json file
-
-        url: "https://data.cdc.gov/resource/9bhg-hcku.json",
-        type: "GET",
-        data: {
-          "$limit" : 100000,
-          "$$app_token" : "LkodRSqKWrJ9i691KYiUPv9oG"
-        }
-    }).done(function(data) {
-      console.log("Retrieved " + data.length + " records from the dataset!");
-
-      jsonfile.writeFile('dataset.json', data)
-    });
-
-    res.status(200).send("Successfully retrieved dataset!")
+    res.status(200).send('OK')
 })
 
 app.get('/db_populate.js', (req, res) => {
@@ -40,6 +24,11 @@ app.get('/db_populate.js', (req, res) => {
 
 app.get('/update/', (req, res) => {
     res.status(200).send(db_populate.update_covid_deaths())
+})
+
+app.get('/get_data/', (req, res) => {
+    res.status(200).send(get_data.getData("covid_deaths_over_time"))
+    
 })
 
 app.use(function(req, res) {
