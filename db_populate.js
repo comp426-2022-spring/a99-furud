@@ -85,7 +85,7 @@ function update_covid_deaths() {
     console.log('fetching rows later than ' + latest_date)
 
     $.ajax({ // fetches dataset from the CDC website and saves it as a json file
-        url: "https://data.cdc.gov/resource/9bhg-hcku.json?$where=end_date = '" + latest_date + "'",
+        url: "https://data.cdc.gov/resource/9bhg-hcku.json?$where=end_date > '" + latest_date + "'",
         type: "GET",
         data: {
         "$limit" : 100000,
