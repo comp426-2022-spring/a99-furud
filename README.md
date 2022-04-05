@@ -1,5 +1,10 @@
 # a99 Final Project
 
+## Stages:
+- Backend (SQLite and db management)
+- HTML to build each page 
+- CSS 
+
 ## Project Goal
 
 Create a dashboard with options to view COVID data trends. 
