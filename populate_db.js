@@ -1,3 +1,16 @@
+/*  
+    All tables are located in './database.db'
+
+    To add a new table to the database, add the dataset's api under
+        'apis', add the table's format in 'tables_format', and 
+        specify which column label to use when checking for updates
+        under 'update_column'. The functions in this script should 
+        then work
+
+    Also, the Update_table(...) function is not yet complete
+*/
+
+
 'use strict';
 
 const Database = require('better-sqlite3');
@@ -16,7 +29,7 @@ const apis = {
 const tables_format = {
     'covid_deaths_by_sex' : `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date_as_of DATETIME, 
+            date_as_of DATETIME,
             start_date DATETIME,
             end_date DATETIME,
             group_by VARCHAR,
@@ -45,41 +58,21 @@ const tables_format = {
         `
 }
 
-const update_column = {
+const update_column = { // the column used to check if table has been updated
     'covid_deaths_by_sex' : 'end_date',
     'covid_deaths_over_time' : 'sub_date',
     'covid_deaths_by_county' : null 
 }
 
-// create_table('covid_deaths_by_sex')
+
+/*  
+    Creates table with the speecified name and populates it
+
+    NOTE: this function overrides the table in the database
+        if it already exists
+*/
 
 function create_table(tbl_name) {
-
-    // console.log(format)
-
-    let stmt = db.prepare(`
-        SELECT name
-        FROM sqlite_master 
-        WHERE type='table' AND name='${tbl_name}';
-    `)
-
-    if (stmt.get() == undefined) { // table doesn't exist
-
-        console.log(`creating table '${tbl_name}'...`)
-
-        stmt = db.prepare(`
-            CREATE TABLE ${tbl_name} (
-                ${format}
-            );
-        `)
-
-        stmt.run()
-        console.log(`'${tbl_name}' has been created`)
-
-    } else {
-        console.log(`table '${tbl_name}' already exists, regenerating its contents...`)
-        db.exec(db.prepare(`DELETE FROM ${tbl_name};`))
-    }
 
     var format = tables_format[tbl_name]
 
@@ -88,11 +81,29 @@ function create_table(tbl_name) {
         return
     }
 
-    // console.log(`
-    //     CREATE TABLE ${tbl_name} (
-    //         ${format}
-    //     );
-    // `)
+    let stmt = db.prepare(`
+        SELECT name
+        FROM sqlite_master 
+        WHERE type='table' AND name='${tbl_name}';
+    `)
+
+    if (stmt.get() != undefined) { // table existS
+        console.log(`table '${tbl_name}' already exists, overriding its contents...`)
+        db.prepare(`DROP TABLE ${tbl_name};`).run()
+    }
+
+    console.log(`creating new table '${tbl_name}'...`)
+
+    stmt = db.prepare(`
+       CREATE TABLE ${tbl_name} (
+            ${format}
+        );
+    `)
+
+    stmt.run()
+    console.log(`'${tbl_name}' has been created`)
+
+    console.log('fetching table contents... NOTE: This will take a few minutes')
 
     $.ajax({ // fetches dataset from the CDC website
         url: apis[tbl_name],
@@ -109,9 +120,17 @@ function create_table(tbl_name) {
 }
 
 
+/*  
+    Updates table with the speecified name and appends
+        the new data onto it 
+
+    NOTE: the specified table must already exist in the 
+        database
+*/
+
 function update_table(tbl_name) {
 
-    let stmt = deaths_over_time_db.prepare(`
+    let stmt = db.prepare(`
         SELECT name
         FROM sqlite_master 
         WHERE type='table' AND name='${tbl_name}';
@@ -129,7 +148,7 @@ function update_table(tbl_name) {
         return
     }
 
-    stmt = deaths_over_time_db.prepare(`
+    stmt = db.prepare(`
         SELECT MAX(sub_date) AS latest
         FROM ${tbl_name};
     `).get()
@@ -151,35 +170,45 @@ function update_table(tbl_name) {
 }
 
 
+/*  
+    Appends the data to the table with the speecified name
+
+    NOTE: external access to this function should be restricted
+        to prevent duplicate entries
+*/
+
 function write_to_table(tbl_name, dataset) {
 
-    let deaths_format = tables_format[tbl_name].split(',')
+    console.log(`adding data to table '${tbl_name}'`)
 
-    deaths_format.array.forEach((element, index) => { // get the table's column names 
-        deaths_format[index] = element.split(" ")[0]
+    var deaths_format = tables_format[tbl_name].split(',')
+
+    // get the table's column names 
+    deaths_format.forEach((element, index) => { 
+        deaths_format[index] = element.slice(13, element.length).split(' ')[0]
     });
+    deaths_format.splice(0, 1)
 
-    stmt = deaths_db.prepare(`
+    var stmt = db.prepare(`
         INSERT INTO ${tbl_name} (
             ${deaths_format.join()}
         )
         VALUES (${'?,'.repeat(deaths_format.length).slice(0, -1)});
     `)
-
+    
     // insert dataset into table row by row        
-    for(i = 0; i < dataset.length; i++) {
-        deaths_arr = []
+    for(var i = 0; i < dataset.length; i++) {
+        var deaths_arr = []
 
         for(var j = 0; j < deaths_format.length; j++) {
-            if(data[i].hasOwnProperty(deaths_format[j])) {
-                deaths_arr.push(data[i][deaths_format[j]])
+            if(dataset[i].hasOwnProperty(deaths_format[j])) {
+                deaths_arr.push(dataset[i][deaths_format[j]])
             } else {
                 deaths_arr.push('')
             }
         }
         stmt.run(deaths_arr)
     }
-
 }
 
-module.exports = {create_table, update_table, write_to_table}
+module.exports = {create_table, update_table}
