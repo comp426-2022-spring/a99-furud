@@ -44,7 +44,7 @@ const tables_format = {
 
     'covid_deaths_over_time' : `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sub_date DATETIME,
+            submission_date DATETIME,
             state VARCHAR,
             tot_cases INTEGER,
             conf_cases INTEGER,
@@ -55,13 +55,33 @@ const tables_format = {
             conf_death INTEGER,
             new_death INTEGER,
             created_at DATETIME
+        `,
+    
+    'covid_deaths_by_county' : `
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            data_as_of DATETIME,
+            start_week DATETIME,
+            end_week DATETIME,
+            state_name VARCHAR,    
+            county_name VARCHAR,
+            county_fips_code VARCHAR,
+            urban_rural_code VARCHAR
         `
 }
 
 const update_column = { // the column used to check if table has been updated
     'covid_deaths_by_sex' : 'end_date',
-    'covid_deaths_over_time' : 'sub_date',
-    'covid_deaths_by_county' : null 
+    'covid_deaths_over_time' : 'submission_date',
+    'covid_deaths_by_county' : 'end_week'
+}
+
+
+function update_database() {  
+    for (const [key, value] of Object.entries(update_column)) {
+        update_table(key)
+    }
+
+    console.log('All tables are up to date')
 }
 
 
@@ -141,7 +161,7 @@ function update_table(tbl_name) {
         return create_table(tbl_name)
     }
 
-    var format = tables_format(tbl_name)
+    var format = tables_format[tbl_name]
 
     if (format == undefined) {
         console.log('table format not found, please create new entry in "populate_db.js"')
