@@ -60,7 +60,7 @@ const tables_format = {
             data_as_of DATETIME,
             start_week DATETIME,
             end_week DATETIME,
-            state_name VARCHAR,    
+            state_name VARCHAR,
             county_name VARCHAR,
             county_fips_code VARCHAR,
             urban_rural_code VARCHAR
@@ -72,6 +72,7 @@ const update_column = { // the column used to check if table has been updated
     'covid_deaths_over_time' : 'submission_date',
     'covid_deaths_by_county' : 'end_week'
 }
+
 
 /*  
     Updates all tables in the database
@@ -229,7 +230,7 @@ function update_table(tbl_name) {
 function write_to_table(tbl_name, dataset) {
 
     console.log(`Adding data to table '${tbl_name}'...`)
-    console.log('NOTE: This will take a few minutes')
+    console.log('NOTE: This might take a few minutes')
 
     var deaths_format = tables_format[tbl_name].split(',')
 
