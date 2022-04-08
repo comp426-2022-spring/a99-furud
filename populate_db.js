@@ -6,8 +6,6 @@
         specify which column label to use when checking for updates
         under 'update_column'. The functions in this script should 
         then work
-
-    Also, the Update_table(...) function is not yet complete
 */
 
 
@@ -108,11 +106,11 @@ function create_table(tbl_name) {
     `)
 
     if (stmt.get() != undefined) { // table existS
-        console.log(`table '${tbl_name}' already exists, overriding its contents...`)
+        console.log(`Table already exists, overriding its contents...`)
         db.prepare(`DROP TABLE ${tbl_name};`).run()
     }
 
-    console.log(`creating new table '${tbl_name}'...`)
+    console.log(`Creating new table '${tbl_name}'...`)
 
     stmt = db.prepare(`
        CREATE TABLE ${tbl_name} (
@@ -121,9 +119,9 @@ function create_table(tbl_name) {
     `)
 
     stmt.run()
-    console.log(`'${tbl_name}' has been created`)
+    console.log(`Table has been created`)
 
-    console.log('fetching table contents... NOTE: This will take a few minutes')
+    console.log('Fetching table contents...')
 
     $.ajax({ // fetches dataset from the CDC website
         url: apis[tbl_name],
@@ -135,8 +133,13 @@ function create_table(tbl_name) {
     }).done(function(data) {
         console.log("Retrieved " + data.length + " records from the dataset");
         write_to_table(tbl_name, data);
+
+    }).fail(function(data) {
+        console.error('Error: Unable to retrieve data set')
+        console.error(data)
     })
 
+    return
 }
 
 
@@ -150,14 +153,21 @@ function create_table(tbl_name) {
 
 function update_table(tbl_name) {
 
+    var format = tables_format[tbl_name]
+
+    if (format == undefined) {
+        console.error('Table format not found, please create new entry in "populate_db.js"')
+        return
+    }
+
     let stmt = db.prepare(`
         SELECT name
         FROM sqlite_master 
         WHERE type='table' AND name='${tbl_name}';
     `)
     
-    if (stmt.get() == undefined) {
-        console.log(`table ${tbl_name} does not exist`)
+    if (stmt.get() == undefined) { // table doesn't exist
+        console.log(`Table ${tbl_name} does not exist`)
         return create_table(tbl_name)
     }
 
@@ -169,24 +179,39 @@ function update_table(tbl_name) {
     }
 
     stmt = db.prepare(`
-        SELECT MAX(sub_date) AS latest
+        SELECT MAX(${update_column[tbl_name]}) AS latest
         FROM ${tbl_name};
     `).get()
     
+    console.log(`Updating table '${tbl_name}'...`)
+
     let latest_date = stmt['latest']
-    console.log('fetching rows later than ' + latest_date)
+
+    console.log(`Fetching rows with '${update_column[tbl_name]}' later than ${latest_date}`)
     
     $.ajax({ // fetches dataset from the CDC website
-        url: `${apis[tbl_name]}?$where=${update_column[tbl_name]}>${latest_date}`,
+        url: `${apis[tbl_name]}?$where=${update_column[tbl_name]}>'${latest_date}'`,
         type: "GET",
         data: {
         "$limit" : 100000,
         "$$app_token" : "LkodRSqKWrJ9i691KYiUPv9oG"
         }
-    }).done(function(data) {
+
+    }).done(function(data) {        
+        if(data.length == 0) {
+            console.log('No new data was found, table is already up to date')
+            return
+        }
+
         console.log("Retrieved " + data.length + " records from the dataset");
         write_to_table(tbl_name, data);
+
+    }).fail(function(data) {
+        console.error('Unable to retrieve dataset')
+        console.error(data)
     })
+
+    return
 }
 
 
@@ -199,7 +224,8 @@ function update_table(tbl_name) {
 
 function write_to_table(tbl_name, dataset) {
 
-    console.log(`adding data to table '${tbl_name}'`)
+    console.log(`Adding data to table '${tbl_name}'...`)
+    console.log('NOTE: This will take a few minutes')
 
     var deaths_format = tables_format[tbl_name].split(',')
 
@@ -218,6 +244,7 @@ function write_to_table(tbl_name, dataset) {
     
     // insert dataset into table row by row        
     for(var i = 0; i < dataset.length; i++) {
+        
         var deaths_arr = []
 
         for(var j = 0; j < deaths_format.length; j++) {
@@ -229,6 +256,9 @@ function write_to_table(tbl_name, dataset) {
         }
         stmt.run(deaths_arr)
     }
+
+    console.log('Done. Table has been populated and is up to date.')
+    return
 }
 
 module.exports = {create_table, update_table}
