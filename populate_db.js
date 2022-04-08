@@ -73,6 +73,9 @@ const update_column = { // the column used to check if table has been updated
     'covid_deaths_by_county' : 'end_week'
 }
 
+/*  
+    Updates all tables in the database
+*/
 
 function update_database() {  
     for (const [key, value] of Object.entries(update_column)) {
@@ -80,6 +83,7 @@ function update_database() {
     }
 
     console.log('All tables are up to date')
+    return
 }
 
 
