@@ -266,4 +266,4 @@ function write_to_table(tbl_name, dataset) {
     return
 }
 
-module.exports = {create_table, update_table}
+module.exports = {create_table, update_table, update_database}
