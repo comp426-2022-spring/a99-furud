@@ -1,5 +1,5 @@
 /*  
-    All tables are located in './database.db'
+    All tables are located in 'a99-furud/data/db/database.db'
 
     To add a new table to the database, add the dataset's api under
         'apis', add the table's format in 'tables_format', and 
@@ -16,7 +16,7 @@ const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
 
-const db = new Database('./database.db')
+const db = new Database('./data/db/database.db')
 
 const apis = {
     'covid_deaths_by_sex' : 'https://data.cdc.gov/resource/9bhg-hcku.json',

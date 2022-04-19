@@ -5,9 +5,9 @@ const fs = require('fs')
 const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
-const get_data = require('./data.js')
+const get_data = require('./src/data.js')
 
-const db = require('./populate_db.js')
+const db = require('./src/populate_db.js')
 
 var port = args.port || 3000
 

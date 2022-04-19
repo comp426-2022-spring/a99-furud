@@ -1,3 +1,8 @@
+/*
+    This file will be deleted soon. Please use populate_db.js to manage database.
+*/
+
+
 'use strict';
 const database = require('better-sqlite3')
 const deaths_db = new database('covid_deaths.db')
