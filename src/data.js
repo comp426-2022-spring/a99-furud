@@ -14,6 +14,9 @@ function getData(tbl_name, cols=[], paras=[]) {
     if(paras.length > 0) {
         sql = sql + " WHERE " + paras.toString();
     }
+
+    sql += " WHERE id < 100 "
+
     sql = sql + ";";
     console.log(sql)
     ret = db.prepare(sql).all();
