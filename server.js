@@ -7,6 +7,8 @@ const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
 const get_data = require('./src/data.js')
 
+app.use(express.static('./frontend'))
+
 const db = require('./src/populate_db.js')
 
 var port = args.port || 3000
@@ -32,7 +34,7 @@ app.get('/update/:table', (req, res) => {
 })
 
 app.get('/get_data/', (req, res) => {
-    res.status(200).send(get_data.getData('covid_deaths_over_time', colos=[], paras=''))
+    res.status(200).send(get_data.getData('covid_deaths_over_time', cols=['submission_date', 'tot_death'], paras=''))
     
 })
 
