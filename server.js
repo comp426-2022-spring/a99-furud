@@ -6,6 +6,7 @@ const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
 const get_data = require('./src/data.js')
+const plotter = require('./plotter.js')
 
 app.use(express.static('./frontend'))
 
