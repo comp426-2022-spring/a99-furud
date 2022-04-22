@@ -1,45 +1,67 @@
+// const button = document.getElementById("button");
+// button.addEventListener("click", covidOverTime);
 
-const button = document.getElementById('button')
-button.addEventListener('click', covidOverTime)
+async function covidOverTime(state=[]) {
+  // event.preventDefault();
 
-graphData = covidOverTime();
+  const endpoint = "get_data";
+  const url = document.baseURI + endpoint;
 
-async function covidOverTime() {
-    
-    console.log('button clicked')
-    
-    // event.preventDefault();
-				
-    const endpoint = "get_data"
-    const url = document.baseURI+endpoint
+  console.log(url);
 
-    console.log(url)
+  try {
+    let data = {
+      name: "covid_deaths_over_time",
+      cols: ["submission_date", "tot_death"],
+      paras: (state.length == 0 ? []: ["state='" + state + "'"]),
+      order: "submission_date"
+    };
 
-    try {
-        const flip = await getData(url);
+    const trend = await getData(url, data);
+    return trend;
 
-        console.log(flip);
-        // graphData = flip;
-        document.getElementById("outputTable").innerHTML = flip;
-
-        return flip;
-    } catch (error) {
-        console.log(error);
-        return;
-    }
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 }
 
-async function getData(url) {
+async function covidBySex(state="United States", sex="All Sexes") {
+  // event.preventDefault();
+
+  const endpoint = "get_data";
+  const url = document.baseURI + endpoint;
+
+  console.log(url);
+
+  try {
+    let data = {
+      name: "covid_deaths_by_sex",
+      cols: ["end_date", "SUM(total_deaths)"],
+      paras: ["state='" + state + "' AND sex='" + sex + "' AND age_group='All Ages' GROUP BY end_date"],
+      order: "end_date"
+    };
+    
+    const trend = await getData(url, data);
+    return trend;
+
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+async function getData(url, data) {
     const options = {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            }
-        };
-    
-        const response = await fetch(url, options);
-        return response.json()
-}
-
-// export {graphData};
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+  
+    console.log("options", options);
+    const response = await fetch(url, options);
+    return response.json();
+  }
