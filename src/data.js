@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const db = new Database('./data/db/database.db');
 
-function getData(tbl_name, cols=[], paras=[]) {
+function getData(tbl_name, cols=[], paras=[], order_column) {
     
     sql = "SELECT ";
 
@@ -15,8 +15,7 @@ function getData(tbl_name, cols=[], paras=[]) {
         sql = sql + " WHERE " + paras.toString();
     }
 
-    sql += " WHERE id < 100 "
-
+    sql += " ORDER BY " + order_column
     sql = sql + ";";
     console.log(sql)
     ret = db.prepare(sql).all();
