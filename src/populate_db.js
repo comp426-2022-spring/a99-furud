@@ -74,7 +74,7 @@ const update_column = { // the column used to check if table has been updated
 }
 
 // Update database when program is launched
-update_database()
+// update_database()
 
 /*  
     Updates all tables in the database
