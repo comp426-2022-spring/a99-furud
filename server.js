@@ -6,6 +6,7 @@ const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
 const get_data = require('./src/data.js')
+const plotter = require('./plotter.js')
 
 const db = require('./src/populate_db.js')
 
@@ -32,7 +33,8 @@ app.get('/update/:table', (req, res) => {
 })
 
 app.get('/get_data/', (req, res) => {
-    res.status(200).send(get_data.getData('covid_deaths_over_time', colos=[], paras=''))
+    data = get_data.getData('covid_deaths_over_time', colos=['tot_cases'], paras="state='NC'")
+    res.status(200).send(data1)
     
 })
 
