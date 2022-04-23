@@ -1,18 +1,26 @@
 const express = require("express");
 const args = require("minimist")(process.argv.slice(0));
 const app = express();
-const fs = require("fs");
 const { JSDOM } = require("jsdom");
 const { window } = new JSDOM("");
 const $ = require("jquery")(window);
+
 const get_data = require("./src/data.js");
+const fs = require('fs')
+const morgan = require('morgan')
+const logger = require('./src/middleware/logger.js')
+const db = require("./src/populate_db.js");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(express.static("./frontend"));
 
-const db = require("./src/populate_db.js");
+// logging functions
+app.use(logger)
+
+let accesslogstream = fs.createWriteStream('./data/log/access.log', { flags: 'a' })
+app.use(morgan('combined', { stream: accesslogstream }))
+
 
 var port = args.port || 3000;
 
