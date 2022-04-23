@@ -3,26 +3,34 @@
   './dataFromAPI.js'
 */
 
+focusDiv('home')
 
 let info;
+let state;
+let chart;
 
-const state = "NC";
+const btnSelectState = document.getElementById('states')
 
-// TODO: make a drop down manu to allow the user to select state
-covidOverTime(state).then((info) => {
+btnSelectState.addEventListener('change', function (event) {
 
-  let dates = [];
-  let deaths = [];
+  event.preventDefault();
 
-  info.forEach((element) => {
-    dates.push(element["submission_date"].split('T')[0]);
-    deaths.push(element["tot_death"]);
-  });
+  state = this.options[this.selectedIndex].value;
+  console.log('state', state)
 
-  var covid_over_time = document.getElementById("time_chart").getContext("2d");
-  var chart = new Chart(covid_over_time, {
-    type: "line",
-    data: {
+  covidOverTime(state).then((info) => {
+
+    let dates = [];
+    let deaths = [];
+
+    info.forEach((element) => {
+      dates.push(element["submission_date"].split('T')[0]);
+      deaths.push(element["tot_death"]);
+    });
+
+    var covid_over_time = document.getElementById("trend-chart").getContext("2d");
+
+    let chart_data = {
       labels: dates,
       datasets: [
         {
@@ -31,36 +39,61 @@ covidOverTime(state).then((info) => {
           fill: false,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
+          responsive: true,
+          maintainAspectRatio: false
         },
       ],
-    },
+    }
+
+    if (chart == undefined) {
+      chart = new Chart(covid_over_time, {
+        type: "line",
+        data: chart_data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    } else {
+      chart.config.data = chart_data;
+      chart.update()
+    }
   });
+
 });
 
 // TODO: plot the data for each sex with different lines on the same chart
-covidBySex().then((info) => {
-  let dates = [];
-  let deaths = [];
+btnStateTrend.addEventListener('click', function () {
 
-  info.forEach((element) => {
-    dates.push(element["end_date"].split('T')[0]);
-    deaths.push(element["SUM(total_deaths)"]);
-  });
+  covidBySex().then((info) => {
+    let dates = [];
+    let deaths = [];
 
-  var covid_by_sex = document.getElementById("state_chart").getContext("2d");
-  var chart = new Chart(covid_by_sex, {
-    type: "line",
-    data: {
-      labels: dates,
-      datasets: [
-        {
-          data: deaths,
-          label: "Montly Covid-19 Deaths in the United States",
-          fill: false,
-          borderColor: "rgb(75, 192, 192)",
-          tension: 0.1,
-        },
-      ],
-    },
+    info.forEach((element) => {
+      dates.push(element["end_date"].split('T')[0]);
+      deaths.push(element["SUM(total_deaths)"]);
+    });
+
+    var covid_by_sex = document.getElementById("state-chart").getContext("2d");
+    var chart = new Chart(covid_by_sex, {
+      type: "line",
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            data: deaths,
+            label: "Monthly Covid-19 Deaths in the United States",
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+          },
+        ],
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
   });
-})
+});
