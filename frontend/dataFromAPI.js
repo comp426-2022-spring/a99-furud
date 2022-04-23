@@ -38,7 +38,7 @@ async function covidBySex(state="United States", sex="All Sexes") {
     let data = {
       name: "covid_deaths_by_sex",
       cols: ["end_date", "SUM(total_deaths)"],
-      paras: ["state='" + state + "' AND sex='" + sex + "' AND age_group='All Ages' GROUP BY end_date"],
+      paras: ["state='" + state + "' AND sex='" + sex + "' AND age_group='All Ages' AND month > 0 GROUP BY end_date"],
       order: "end_date"
     };
     
