@@ -12,20 +12,20 @@
 'use strict';
 
 const Database = require('better-sqlite3');
-const { JSDOM } = require( "jsdom" );
-const { window } = new JSDOM( "" );
-const $ = require( "jquery" )( window );
+const { JSDOM } = require("jsdom");
+const { window } = new JSDOM("");
+const $ = require("jquery")(window);
 
 const db = new Database('./data/db/database.db')
 
 const apis = {
-    'covid_deaths_by_sex' : 'https://data.cdc.gov/resource/9bhg-hcku.json',
-    'covid_deaths_over_time' : 'https://data.cdc.gov/resource/9mfq-cb36.json',
-    'covid_deaths_by_county' : 'https://data.cdc.gov/resource/kn79-hsxy.json'
+    'covid_deaths_by_sex': 'https://data.cdc.gov/resource/9bhg-hcku.json',
+    'covid_deaths_over_time': 'https://data.cdc.gov/resource/9mfq-cb36.json',
+    'covid_deaths_by_county': 'https://data.cdc.gov/resource/kn79-hsxy.json'
 }
 
 const tables_format = {
-    'covid_deaths_by_sex' : `
+    'covid_deaths_by_sex': `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date_as_of DATETIME,
             start_date DATETIME,
@@ -40,7 +40,7 @@ const tables_format = {
             total_deaths INTEGER
         `,
 
-    'covid_deaths_over_time' : `
+    'covid_deaths_over_time': `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             submission_date DATETIME,
             state VARCHAR,
@@ -54,8 +54,8 @@ const tables_format = {
             new_death INTEGER,
             created_at DATETIME
         `,
-    
-    'covid_deaths_by_county' : `
+
+    'covid_deaths_by_county': `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             data_as_of DATETIME,
             start_week DATETIME,
@@ -63,24 +63,27 @@ const tables_format = {
             state_name VARCHAR,
             county_name VARCHAR,
             county_fips_code VARCHAR,
-            urban_rural_code VARCHAR
+            urban_rural_code VARCHAR,
+            covid_death INTEGER DEFAULT 0,
+            total_death INTEGER
         `
 }
 
 const update_column = { // the column used to check if table has been updated
-    'covid_deaths_by_sex' : 'end_date',
-    'covid_deaths_over_time' : 'submission_date',
-    'covid_deaths_by_county' : 'end_week'
+    'covid_deaths_by_sex': 'end_date',
+    'covid_deaths_over_time': 'submission_date',
+    'covid_deaths_by_county': 'end_week'
 }
 
 // Update database when program is launched
-// update_database()
+update_database()
+
 
 /*  
     Updates all tables in the database
 */
 
-function update_database() {  
+function update_database() {
     for (const [key, value] of Object.entries(update_column)) {
         update_table(key)
     }
@@ -134,14 +137,14 @@ function create_table(tbl_name) {
         url: apis[tbl_name],
         type: "GET",
         data: {
-        "$limit" : 100000,
-        "$$app_token" : "LkodRSqKWrJ9i691KYiUPv9oG"
+            "$limit": 100000,
+            "$$app_token": "LkodRSqKWrJ9i691KYiUPv9oG"
         }
-    }).done(function(data) {
+    }).done(function (data) {
         console.log("Retrieved " + data.length + " records from the dataset");
         write_to_table(tbl_name, data);
 
-    }).fail(function(data) {
+    }).fail(function (data) {
         console.error('Error: Unable to retrieve data set')
         console.error(data)
     })
@@ -172,7 +175,7 @@ function update_table(tbl_name) {
         FROM sqlite_master 
         WHERE type='table' AND name='${tbl_name}';
     `)
-    
+
     if (stmt.get() == undefined) { // table doesn't exist
         console.log(`Table ${tbl_name} does not exist`)
         return create_table(tbl_name)
@@ -189,23 +192,23 @@ function update_table(tbl_name) {
         SELECT MAX(${update_column[tbl_name]}) AS latest
         FROM ${tbl_name};
     `).get()
-    
+
     console.log(`Updating table '${tbl_name}'...`)
 
     let latest_date = stmt['latest']
 
     console.log(`Fetching rows with '${update_column[tbl_name]}' later than ${latest_date}`)
-    
+
     $.ajax({ // fetches dataset from the CDC website
         url: `${apis[tbl_name]}?$where=${update_column[tbl_name]}>'${latest_date}'`,
         type: "GET",
         data: {
-        "$limit" : 100000,
-        "$$app_token" : "LkodRSqKWrJ9i691KYiUPv9oG"
+            "$limit": 100000,
+            "$$app_token": "LkodRSqKWrJ9i691KYiUPv9oG"
         }
 
-    }).done(function(data) {        
-        if(data.length == 0) {
+    }).done(function (data) {
+        if (data.length == 0) {
             console.log('No new data was found, table is already up to date')
             return
         }
@@ -213,10 +216,11 @@ function update_table(tbl_name) {
         console.log("Retrieved " + data.length + " records from the dataset");
         write_to_table(tbl_name, data);
 
-    }).fail(function(data) {
+    }).fail(function (data) {
         console.error('Unable to retrieve dataset')
         console.error(data)
     })
+
 
     return
 }
@@ -237,7 +241,7 @@ function write_to_table(tbl_name, dataset) {
     var deaths_format = tables_format[tbl_name].split(',')
 
     // get the table's column names 
-    deaths_format.forEach((element, index) => { 
+    deaths_format.forEach((element, index) => {
         deaths_format[index] = element.slice(13, element.length).split(' ')[0]
     });
     deaths_format.splice(0, 1)
@@ -248,14 +252,14 @@ function write_to_table(tbl_name, dataset) {
         )
         VALUES (${'?,'.repeat(deaths_format.length).slice(0, -1)});
     `)
-    
+
     // insert dataset into table row by row        
-    for(var i = 0; i < dataset.length; i++) {
-        
+    for (var i = 0; i < dataset.length; i++) {
+
         var deaths_arr = []
 
-        for(var j = 0; j < deaths_format.length; j++) {
-            if(dataset[i].hasOwnProperty(deaths_format[j])) {
+        for (var j = 0; j < deaths_format.length; j++) {
+            if (dataset[i].hasOwnProperty(deaths_format[j])) {
                 deaths_arr.push(dataset[i][deaths_format[j]])
             } else {
                 deaths_arr.push('')
@@ -264,8 +268,16 @@ function write_to_table(tbl_name, dataset) {
         stmt.run(deaths_arr)
     }
 
+    if (tbl_name == 'covid_deaths_by_county') {
+        db.exec(`
+            UPDATE covid_deaths_by_county
+            SET covid_death=0
+            WHERE covid_death='';
+        `)
+    }
+
     console.log('Done. Table has been populated and is up to date.')
     return
 }
 
-module.exports = {create_table, update_table, update_database}
+module.exports = { create_table, update_table, update_database }
