@@ -80,7 +80,7 @@ app.get('/loggedin', (req, res) => {
 
 app.post('/auth', (req, res) => {
   let username = req.body.username;
-  let password = req.body.password;
+  let password = req.body.pass;
 
   if (username && password) {
     check_pass = users.check_user(username, password);
@@ -127,7 +127,7 @@ app.post('/delete_conf', (req, res) => {
   res.status(200)
 
   let username = req.body.username;
-  let password = req.body.password;
+  let password = req.body.pass;
   deleted = users.delete_acc(username, password);
   if (deleted) {
     console.log('User successfully deleted!')
