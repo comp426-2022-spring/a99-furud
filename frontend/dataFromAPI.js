@@ -51,6 +51,31 @@ async function covidBySex(state="United States", sex="All Sexes") {
   }
 }
 
+async function covidbyCounty(state=[]) {
+  // event.preventDefault();
+
+  const endpoint = "get_data";
+  const url = document.baseURI + endpoint;
+
+  console.log(url);
+
+  try {
+    let data = {
+      name: "covid_deaths_by_county",
+      cols: ["county_name", "covid_death"],
+      paras: (state.length == 0 ? []: ["state_name='" + state + "'"]),
+      order: "covid_death DESC"
+    };
+
+    const trend = await getData(url, data);
+    return trend;
+
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
 async function getData(url, data) {
     const options = {
       method: "POST",

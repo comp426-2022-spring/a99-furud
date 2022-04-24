@@ -8,6 +8,7 @@ focusDiv('home')
 let info;
 let state;
 let chart;
+let countyChart;
 
 const btnSelectState = document.getElementById('states')
 
@@ -35,7 +36,7 @@ btnSelectState.addEventListener('change', function (event) {
       datasets: [
         {
           data: deaths,
-          label: "Total Deaths in " + state,
+          label: "Total Covid-19 Deaths in " + state,
           fill: false,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
@@ -60,6 +61,49 @@ btnSelectState.addEventListener('change', function (event) {
     }
   });
 
+  covidbyCounty(state).then((info) => {
+
+    let county = [];
+    let deaths = [];
+
+    info.forEach((element) => {
+      county.push(element["county_name"]);
+      deaths.push(element["covid_death"]);
+    });
+
+    var covid_by_county = document.getElementById("county-chart").getContext("2d");
+
+    let chart_data = {
+      labels: county,
+      datasets: [
+        {
+          data: deaths,
+          label: "Deaths in " + state + " by county",
+          fill: false,
+          borderColor: "rgb(75, 192, 192)",
+          tension: 0.1,
+          responsive: true,
+          maintainAspectRatio: false
+        },
+      ],
+    }
+
+    if (countyChart == undefined) {
+      countyChart = new Chart(covid_by_county, {
+        type: "bar",
+        data: chart_data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    } else {
+      countyChart.config.data = chart_data;
+      countyChart.update()
+    }
+  });
+
+
 });
 
 // TODO: plot the data for each sex with different lines on the same chart
@@ -76,7 +120,7 @@ btnStateTrend.addEventListener('click', function () {
 
     var covid_by_sex = document.getElementById("state-chart").getContext("2d");
     var chart = new Chart(covid_by_sex, {
-      type: "line",
+      type: "bar",
       data: {
         labels: dates,
         datasets: [
