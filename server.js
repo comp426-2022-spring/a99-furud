@@ -67,7 +67,15 @@ app.post("/get_data/", (req, res) => {
 
 app.get('/login', (req, res) => {
   res.status(200)
-  res.sendFile(__dirname + '/frontend/login.html')
+  if (req.session.loggedin) {
+    res.redirect('/loggedin')
+  } else {
+    res.sendFile(__dirname + '/frontend/login.html')
+  }
+})
+
+app.get('/loggedin', (req, res) => {
+  res.sendFile(__dirname + '/frontend/loggedin.html')
 })
 
 app.post('/auth', (req, res) => {
@@ -79,7 +87,7 @@ app.post('/auth', (req, res) => {
     if (check_pass) {
       req.session.loggedin = true;
       req.session.username = username;
-      res.redirect('/')
+      res.redirect('/login')
     } else {
       console.log('invalid user')
       res.redirect('/login')
@@ -89,6 +97,44 @@ app.post('/auth', (req, res) => {
     console.log('username or password is empty')
     res.redirect('/login')
     res.end()
+  }
+})
+
+app.get('/signup', (req, res) => {
+  res.status(200)
+  res.sendFile(__dirname + "/frontend/signup.html")
+})
+
+app.post('/signup_conf', (req, res) => {
+  let username = req.body.username;
+  let password = req.body.pass;
+  res.status(200);
+  add = users.add_user(username, password);
+  if (add) {
+    console.log('User successfully added!')
+    res.redirect('/loggedin')
+  } else {
+    console.log('Username is already taken');
+    res.redirect('/signup');
+  }
+})
+
+app.get('/delete_acc', (req, res) => {
+  res.status(200).sendFile(__dirname + '/frontend/delete_acc.html')
+})
+
+app.post('/delete_conf', (req, res) => {
+  res.status(200)
+
+  let username = req.body.username;
+  let password = req.body.password;
+  deleted = users.delete_acc(username, password);
+  if (deleted) {
+    console.log('User successfully deleted!')
+    res.redirect('/')
+  } else {
+    console.log('Invalid login');
+    res.redirect('/delete_acc');
   }
 })
 

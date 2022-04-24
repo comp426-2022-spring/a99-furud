@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
     <head>
-        A99 - Furud Login Page
+        <title>Sign Up</title>
+        A99 - Furud Sign-up Page
     </head>
     <body>
-        <form action="members.osiolabs.com/login" method="post"></form>
-        Username:<br>
-        <input type="text" name="username" id="username" placeholder="Username" required><br><br>
-        Password:<br>
-        <input type="password" name="pass" id="pass" placeholder="Password" required><br><br>
+        <form action="/signup_conf" method="post">
+            Username:<br>
+            <input type="text" name="username" id="username" placeholder="Username" required><br><br>
+            Password:<br>
+            <input type="password" name="pass" id="pass" placeholder="Password" required><br><br>
 
-        <input type="submit" value="login">
+            <input type="submit" value="Register">
+        </form>
+        <form action="/login">
+            Already a user? Login below: <br>
+            <input type="submit" value="Login">
+        </form> <p><p></p></p>
+        <form action="/">
+            <input type="submit" value="Home">
+        </form>
     </body>
-    <script src="users.js"></script>
 </html>
