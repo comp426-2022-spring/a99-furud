@@ -23,10 +23,12 @@ btnSelectState.addEventListener('change', function (event) {
 
     let dates = [];
     let deaths = [];
+    let cases = [];
 
     info.forEach((element) => {
       dates.push(element["submission_date"].split('T')[0]);
       deaths.push(element["tot_death"]);
+      cases.push(element["new_case"])
     });
 
     var covid_over_time = document.getElementById("trend-chart").getContext("2d");
@@ -43,6 +45,10 @@ btnSelectState.addEventListener('change', function (event) {
           responsive: true,
           maintainAspectRatio: false
         },
+        {
+          data: cases,
+          label: "Total no. of cases"
+        }
       ],
     }
 
@@ -52,7 +58,13 @@ btnSelectState.addEventListener('change', function (event) {
         data: chart_data,
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 100000
+            }
+          }
         }
       });
     } else {
@@ -115,7 +127,7 @@ btnStateTrend.addEventListener('click', function () {
 
     info.forEach((element) => {
       dates.push(element["end_date"].split('T')[0]);
-      deaths.push(element["SUM(total_deaths)"]);
+      deaths.push(element["SUM(covid_19_deaths)"]);
     });
 
     var covid_by_sex = document.getElementById("state-chart").getContext("2d");
