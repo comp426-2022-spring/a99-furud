@@ -27,16 +27,16 @@ const apis = {
 const tables_format = {
     'covid_deaths_by_sex': `
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date_as_of DATETIME,
+            data_as_of DATETIME,
             start_date DATETIME,
             end_date DATETIME,
-            group_by VARCHAR,
+            "group" VARCHAR,
             year VARCHAR,
             month VARCHAR,
             state VARCHAR,
             sex VARCHAR,
             age_group VARCHAR,
-            covid_deaths INTEGER,
+            covid_19_deaths INTEGER,
             total_deaths INTEGER
         `,
 
@@ -64,7 +64,7 @@ const tables_format = {
             county_name VARCHAR,
             county_fips_code VARCHAR,
             urban_rural_code VARCHAR,
-            covid_death INTEGER DEFAULT 0,
+            covid_death INTEGER,
             total_death INTEGER
         `
 }
@@ -253,6 +253,11 @@ function write_to_table(tbl_name, dataset) {
         VALUES (${'?,'.repeat(deaths_format.length).slice(0, -1)});
     `)
 
+    // 'group' is a reserved keyword in Sqlite
+    if (tbl_name == 'covid_deaths_by_sex') {
+        deaths_format[3] = 'group'
+    }
+
     // insert dataset into table row by row        
     for (var i = 0; i < dataset.length; i++) {
 
@@ -273,6 +278,12 @@ function write_to_table(tbl_name, dataset) {
             UPDATE covid_deaths_by_county
             SET covid_death=0
             WHERE covid_death='';
+        `)
+    } else if (tbl_name == 'covid_deaths_by_sex') {
+        db.exec(`
+            UPDATE covid_deaths_by_sex
+            SET covid_19_deaths=0
+            WHERE covid_19_deaths='';
         `)
     }
 
