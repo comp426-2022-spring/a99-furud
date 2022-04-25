@@ -1,5 +1,34 @@
 .chart-container {
     display: block;
-    width: 1500px;
+    width: 1350px;
     height: 600px;
+}
+
+body {
+    padding: 20px;
+    left: 0px;
+    width: 1440px;
+    background-color: rgba(123, 175, 212, 0.8);
+    text-align: center;
+    color: rgb(255, 255, 255);
+    line-height: 30px;
+    z-index: 2;
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s ease 0s;
+    font-family: apercu, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    white-space: normal;
+    word-spacing: 0px;
+}
+
+button {
+    font-family: apercu, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 300;
+    white-space: normal;
+    word-spacing: 0px;
 }
