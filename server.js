@@ -10,8 +10,6 @@ const fs = require('fs')
 const morgan = require('morgan')
 const logger = require('./src/middleware/logger.js')
 const db = require("./src/populate_db.js");
-const req = require("express/lib/request");
-const { response } = require("express");
 const session = require('express-session')
 
 app.use(express.urlencoded({ extended: true }));
@@ -26,9 +24,9 @@ app.use(session({
 // logging functions
 app.use(logger)
 
+
 let accesslogstream = fs.createWriteStream('./data/log/access.log', { flags: 'a' })
 app.use(morgan('combined', { stream: accesslogstream }))
-
 
 var port = args.port || 3000;
 
@@ -51,6 +49,13 @@ app.get("/update/:table", (req, res) => {
     res.status(200).send(db.update_table(req.params.table));
   }
 });
+
+app.get('/logout', (req, res) => {
+  if (req.session.loggedin) {
+    req.session.loggedin = false;
+  }
+  res.redirect('/')
+})
 
 app.post("/get_data/", (req, res) => {
   res
@@ -75,29 +80,29 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/loggedin', (req, res) => {
-  res.sendFile(__dirname + '/frontend/loggedin.html')
+  try {
+    res.sendFile(__dirname + '/frontend/loggedin.html')
+  } catch (error) {
+    console.log('error')
+    console.error(error)
+  }
+  
 })
 
 app.post('/auth', (req, res) => {
   let username = req.body.username;
   let password = req.body.pass;
 
-  if (username && password) {
-    check_pass = users.check_user(username, password);
-    if (check_pass) {
-      req.session.loggedin = true;
-      req.session.username = username;
-      res.redirect('/login')
-    } else {
-      console.log('invalid user')
-      res.redirect('/login')
-    }
-    res.end()
-  } else {
-    console.log('username or password is empty')
+  check_pass = users.check_user(username, password);
+  if (check_pass) {
+    req.session.loggedin = true;
+    req.session.username = username;
     res.redirect('/login')
-    res.end()
+  } else {
+    console.log('invalid user')
+    res.redirect('/login')
   }
+  //res.end()
 })
 
 app.get('/signup', (req, res) => {
@@ -132,9 +137,11 @@ app.post('/delete_conf', (req, res) => {
   if (deleted) {
     console.log('User successfully deleted!')
     res.redirect('/')
+    res.end()
   } else {
     console.log('Invalid login');
     res.redirect('/delete_acc');
+    res.end()
   }
 })
 
