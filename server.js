@@ -4,7 +4,7 @@ const app = express();
 const { JSDOM } = require("jsdom");
 const { window } = new JSDOM("");
 const $ = require("jquery")(window);
-const users = require('./users.js')
+const users = require('./src/users.js')
 const get_data = require("./src/data.js");
 const fs = require('fs')
 const morgan = require('morgan')
@@ -117,6 +117,8 @@ app.post('/signup_conf', (req, res) => {
   add = users.add_user(username, password);
   if (add) {
     console.log('User successfully added!')
+    req.session.loggedin = true;
+    req.session.username = username;
     res.redirect('/loggedin')
   } else {
     console.log('Username is already taken');
@@ -136,6 +138,7 @@ app.post('/delete_conf', (req, res) => {
   deleted = users.delete_acc(username, password);
   if (deleted) {
     console.log('User successfully deleted!')
+    req.session.loggedin = false;
     res.redirect('/')
     res.end()
   } else {

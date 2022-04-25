@@ -38,7 +38,6 @@ function add_user(user, pass) {
 
         db.exec(create_table);
     }
-
     let check_usr = db.prepare(`SELECT username FROM users WHERE username='${user}';`).all()
     if (check_usr.length > 0) {
         return false;
