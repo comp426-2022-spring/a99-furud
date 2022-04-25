@@ -12,7 +12,7 @@ async function covidOverTime(state=[]) {
   try {
     let data = {
       name: "covid_deaths_over_time",
-      cols: ["submission_date", "tot_death"],
+      cols: ["submission_date", "tot_death", "new_case"],
       paras: (state.length == 0 ? []: ["state='" + state + "'"]),
       order: "submission_date"
     };
@@ -37,8 +37,8 @@ async function covidBySex(state="United States", sex="All Sexes") {
   try {
     let data = {
       name: "covid_deaths_by_sex",
-      cols: ["end_date", "SUM(total_deaths)"],
-      paras: ["state='" + state + "' AND sex='" + sex + "' AND age_group='All Ages' AND month > 0 GROUP BY end_date"],
+      cols: ["end_date", "SUM(covid_19_deaths)"],
+      paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group='All Ages' AND "group" = 'By Month' GROUP BY end_date`],
       order: "end_date"
     };
     
