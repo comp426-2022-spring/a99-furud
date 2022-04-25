@@ -5,6 +5,10 @@
         A99 - Furud Login Page
     </head>
     <body>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/signup">Sign-Up</a>
+        </nav>
         <form action="/auth" method="post">
             Username:<br>
             <input type="text" name="username" id="username" placeholder="Username" required><br><br>
@@ -13,12 +17,8 @@
 
             <input type="submit" value="Login">
         </form><p><p></p></p>
-        <form action="/signup">
-            New user? Register below: <br>
-            <input type="submit" value="Sign-up">
-        </form> <p><p></p></p>
-        <form action="/">
-            <input type="submit" value="Home">
+        <form action="/" method="post">
+            <input type="submit" value="Home" >
         </form>
     </body>
 </html>
