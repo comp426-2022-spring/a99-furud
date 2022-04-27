@@ -9,6 +9,7 @@ let info;
 let state;
 let chart;
 let countyChart;
+let months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
 
 const btnSelectState = document.getElementById('states')
 
@@ -26,7 +27,7 @@ btnSelectState.addEventListener('change', function (event) {
     let cases = [];
 
     info.forEach((element) => {
-      dates.push(element["submission_date"].split('T')[0]);
+      dates.push(formatDate(element["submission_date"].split('T')[0]));
       deaths.push(element["tot_death"]);
       cases.push(element["new_case"])
     });
@@ -126,7 +127,7 @@ btnStateTrend.addEventListener('click', function () {
     let deaths = [];
 
     info.forEach((element) => {
-      dates.push(element["end_date"].split('T')[0]);
+      dates.push(formatDate(element["end_date"].split('T')[0]));
       deaths.push(element["SUM(covid_19_deaths)"]);
     });
 
@@ -153,3 +154,10 @@ btnStateTrend.addEventListener('click', function () {
     });
   });
 });
+
+function formatDate(date) {
+  let date_arr = date.split('-')
+  let month = months[Number(date_arr[1]) - 1];
+
+  return month + " " + String(date_arr[0])
+}
