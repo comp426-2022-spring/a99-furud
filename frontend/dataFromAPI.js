@@ -26,8 +26,16 @@ async function covidOverTime(state=[]) {
   }
 }
 
-async function covidBySex(state="United States", sex="All Sexes") {
+async function covidBySex(state="United States", sex="All Sexes", age="All Ages") {
   // event.preventDefault();
+
+  // const age_groups = {
+  //   "0-17 years" : ["0-17 years"],
+  //   "18-44 years" : ["18-29 years", "30-39 years", "35-44 years"],
+  //   "44-64 years" : ["45-54 years", "55-64 years"],
+  //   "65-84 years" : ["65-74 years", "75-84 years"],
+  //   "85 years and over": ["85 years and over"]
+  // }
 
   const endpoint = "get_data";
   const url = document.baseURI + endpoint;
@@ -37,9 +45,17 @@ async function covidBySex(state="United States", sex="All Sexes") {
   try {
     let data = {
       name: "covid_deaths_by_sex",
-      cols: ["end_date", "SUM(covid_19_deaths)"],
-      paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group='All Ages' AND "group" = 'By Month' GROUP BY end_date`],
-      order: "end_date"
+      cols: ["age_group", "SUM(covid_19_deaths)"],
+      paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group<>'${age}' AND "group" = 'By Total' AND 
+      (age_group = '0-17 years' 
+      OR age_group = '18-29 years'
+      OR age_group = '30-39 years'
+      OR age_group = '40-49 years'
+      OR age_group = '50-64 years'
+      OR age_group = '65-74 years'
+      OR age_group = '75-84 years')
+      GROUP BY age_group`],
+      order: "SUM(covid_19_deaths) DESC"
     };
     
     const trend = await getData(url, data);
