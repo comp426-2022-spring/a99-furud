@@ -9,6 +9,7 @@ let info;
 let state;
 let chart;
 let countyChart;
+let ageChart;
 let age_group;
 let months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
 
@@ -49,7 +50,9 @@ btnSelectState.addEventListener('change', function (event) {
         },
         {
           data: cases,
-          label: "Total no. of cases"
+          label: "New cases",
+          fill: false,
+          borderColor: "rgb(255, 215, 0)"
         }
       ],
     }
@@ -66,7 +69,8 @@ btnSelectState.addEventListener('change', function (event) {
               min: 0,
               max: 100000
             }
-          }
+          },
+          tension: 1
         }
       });
     } else {
@@ -121,9 +125,11 @@ btnSelectState.addEventListener('change', function (event) {
 
 const btnSelectState2 = document.getElementById('states-2')
 const btnSelectAge = document.getElementById('ages')
+const btnAgeGroupChart = document.getElementById('btnStateTrend')
 
+btnAgeGroupChart.addEventListener('click', regenerate_chart)
 btnSelectState2.addEventListener('change', regenerate_chart)
-btnSelectAge.addEventListener('change', regenerate_chart)
+// btnSelectAge.addEventListener('change', regenerate_chart)
 
 
 // TODO: plot the data for each sex with different lines on the same chart
@@ -133,43 +139,48 @@ function regenerate_chart() {
   let ages = document.getElementById("ages")
 
   state = states.options[states.selectedIndex].text;
-  age_group = ages.options[ages.selectedIndex].value;
+  // age_group = ages.options[ages.selectedIndex].value;
  
   // console.log('state', state)
 
   covidBySex(state, "All Sexes", "All Ages").then((info) => {
-    let dates = [];
+    let age_groups = [];
     let deaths = [];
 
     info.forEach((element) => {
-      dates.push((element["age_group"].split('T')[0]));
-      deaths.push(element["SUM(covid_19_deaths)"]);
+      age_groups.push((element["age_group"].split('T')[0]));
+      deaths.push(element["covid_19_deaths"]);
     });
 
-    console.log('dates:', dates)
-    console.log('deaths:', deaths)
+    let chart_data =  {
+      labels: age_groups,
+      datasets: [
+        {
+          data: deaths,
+          label: "Deaths by age group in " + state,
+          fill: false,
+          borderColor: "rgba(0, 0, 0, 0.1)",
+          tension: 0.1,
+          backgroundColor: getColors(age_groups.length)
+        },
+      ],
+    }
+
     var covid_by_sex = document.getElementById("state-chart").getContext("2d");
-    var chart = new Chart(covid_by_sex, {
-      type: "doughnut",
-      data: {
-        labels: dates,
-        datasets: [
-          {
-            data: deaths,
-            label: "Deaths by age group in " + state,
-            fill: false,
-            borderColor: "rgb(75, 192, 192)",
-            tension: 0.1,
-            backgroundColor: getColors(dates.length)
-          },
-        ],
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    });
+    
+    if (ageChart == undefined) {
+      ageChart = new Chart(covid_by_sex, {
+        type: "doughnut",
+        data: chart_data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    } else {
+      ageChart.config.data = chart_data;
+      ageChart.update()
+    }
   });
 };
 
