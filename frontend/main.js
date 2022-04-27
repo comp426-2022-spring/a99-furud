@@ -150,7 +150,7 @@ function regenerate_chart() {
     console.log('deaths:', deaths)
     var covid_by_sex = document.getElementById("state-chart").getContext("2d");
     var chart = new Chart(covid_by_sex, {
-      type: "pie",
+      type: "doughnut",
       data: {
         labels: dates,
         datasets: [
@@ -160,6 +160,7 @@ function regenerate_chart() {
             fill: false,
             borderColor: "rgb(75, 192, 192)",
             tension: 0.1,
+            backgroundColor: getColors(dates.length)
           },
         ],
       },
@@ -177,4 +178,15 @@ function formatDate(date) {
   let month = months[Number(date_arr[1]) - 1];
 
   return month + " " + String(date_arr[0])
+}
+
+function getColors(length){
+  let pallet = ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"];
+  let colors = [];
+
+  for(let i = 0; i < length; i++) {
+    colors.push(pallet[i % (pallet.length - 1)]);
+  }
+
+  return colors;
 }
