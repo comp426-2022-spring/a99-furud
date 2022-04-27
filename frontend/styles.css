@@ -46,3 +46,8 @@ button {
     color: #000080;
     word-spacing: 5px;
 }
+
+#home {
+    line-height: 50px;
+    text-align: center;
+}
