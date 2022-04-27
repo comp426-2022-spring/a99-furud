@@ -76,10 +76,8 @@ const update_column = { // the column used to check if table has been updated
 }
 
 // Update database when program is launched
-update_database().then(() => {
-    console.log('All tables are up-to-date')
-})
-
+update_database()
+console.log('All tables are up-to-date')
 
 /*  
     Updates all tables in the database

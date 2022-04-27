@@ -13,7 +13,15 @@ async function covidOverTime(state=[]) {
     let data = {
       name: "covid_deaths_over_time",
       cols: ["submission_date", "tot_death", "new_case"],
-      paras: (state.length == 0 ? []: ["state='" + state + "'"]),
+      paras: (state.length == 0 ? []: ["state='" + state + `' AND 
+      new_case NOT IN 
+      (
+          SELECT new_case
+          FROM covid_deaths_over_time
+          ORDER BY new_case DESC
+          LIMIT 100
+      )`
+    ]), // filter extremes
       order: "submission_date"
     };
 
@@ -45,7 +53,7 @@ async function covidBySex(state="United States", sex="All Sexes", age="All Ages"
   try {
     let data = {
       name: "covid_deaths_by_sex",
-      cols: ["age_group", "SUM(covid_19_deaths)"],
+      cols: ["age_group", "covid_19_deaths"],
       paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group<>'${age}' AND "group" = 'By Total' AND 
       (age_group = '0-17 years' 
       OR age_group = '18-29 years'
@@ -55,7 +63,7 @@ async function covidBySex(state="United States", sex="All Sexes", age="All Ages"
       OR age_group = '65-74 years'
       OR age_group = '75-84 years')
       GROUP BY age_group`],
-      order: "SUM(covid_19_deaths) DESC"
+      order: "covid_19_deaths"
     };
     
     const trend = await getData(url, data);
