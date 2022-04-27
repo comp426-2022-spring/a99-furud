@@ -106,3 +106,6 @@ dist
 data/db/users.db
 data/log/log.db
 data/log/user_data.db
+data/db/users.db
+data/log/log.db
+data/log/user_data.db
