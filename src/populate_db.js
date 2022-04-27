@@ -76,19 +76,19 @@ const update_column = { // the column used to check if table has been updated
 }
 
 // Update database when program is launched
-update_database()
+update_database().then(() => {
+    console.log('All tables are up-to-date')
+})
 
 
 /*  
     Updates all tables in the database
 */
 
-function update_database() {
+async function update_database() {
     for (const [key, value] of Object.entries(update_column)) {
         update_table(key)
     }
-
-    console.log('All tables are up to date')
     return
 }
 
@@ -193,11 +193,11 @@ function update_table(tbl_name) {
         FROM ${tbl_name};
     `).get()
 
-    console.log(`Updating table '${tbl_name}'...`)
+    // console.log(`Updating table '${tbl_name}'...`)
 
     let latest_date = stmt['latest']
 
-    console.log(`Fetching rows with '${update_column[tbl_name]}' later than ${latest_date}`)
+    // console.log(`Fetching rows with '${update_column[tbl_name]}' later than ${latest_date}`)
 
     $.ajax({ // fetches dataset from the CDC website
         url: `${apis[tbl_name]}?$where=${update_column[tbl_name]}>'${latest_date}'`,
@@ -209,15 +209,15 @@ function update_table(tbl_name) {
 
     }).done(function (data) {
         if (data.length == 0) {
-            console.log('No new data was found, table is already up to date')
+            // console.log('No new data was found, table is already up to date')
             return
         }
 
-        console.log("Retrieved " + data.length + " records from the dataset");
+        console.log("Retrieved " + data.length + " records for '" + tbl_name + "'");
         write_to_table(tbl_name, data);
 
     }).fail(function (data) {
-        console.error('Unable to retrieve dataset')
+        console.error("Unable to retrieve dataset for '" + tbl_name + "'")
         console.error(data)
     })
 
