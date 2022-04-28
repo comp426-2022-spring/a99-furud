@@ -177,7 +177,8 @@ function regenerate_chart() {
         data: chart_data,
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          /*maintainAspectRatio: false*/
+
         }
       });
     } else {
