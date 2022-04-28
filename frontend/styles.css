@@ -83,6 +83,8 @@ button {
     background: #4B9CD3;
     margin: 0 650px 0 650px;
     border-radius: 40%;
+    width: 200px;
+    margin: auto;
 }
 
 .bigboi {
