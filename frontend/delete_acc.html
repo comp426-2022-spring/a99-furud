@@ -12,17 +12,18 @@
         <a href="/">Home</a>
         <a href="/login">Login</a>
         <a href="/signup">Sign-Up</a>
-        <a href="/logout">Log Out</a>
+        <a href="/logout">Log-Out</a>
         <p></p>
     </nav>
     <p>We're sorry to see you go!</p>
     <p>Please enter login info below to delete account.</p>
     <form action="/delete_conf" method="post">
-        Username:<br>
-        <input type="text" name="username" id="username" placeholder="Username" required><br><br>
-        Password:<br>
-        <input type="password" name="pass" id="pass" placeholder="Password" required><br><br>
-
+        <div class="container">
+            Username:<br>
+            <input type="text" name="username" id="username" placeholder="Username" required><br><br>
+            Password:<br>
+            <input type="password" name="pass" id="pass" placeholder="Password" required><br><br>
+        </div>
         <input type="submit" value="Delete">
     </form>
     </form> <p><p></p></p>
