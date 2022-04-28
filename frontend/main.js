@@ -43,7 +43,7 @@ btnSelectState.addEventListener('change', function (event) {
           data: deaths,
           label: "Total Covid-19 Deaths in " + state,
           fill: false,
-          borderColor: "rgb(240, 0, 60)",
+          borderColor: "rgb(163, 0, 54)",
           tension: 0.1,
           responsive: true,
           maintainAspectRatio: false
@@ -51,7 +51,7 @@ btnSelectState.addEventListener('change', function (event) {
         {
           data: cases,
           label: "New cases",
-          fill: false,
+          fill: true,
           borderColor: "rgb(0, 0, 128)"
         }
       ],
@@ -98,11 +98,13 @@ btnSelectState.addEventListener('change', function (event) {
           data: deaths,
           label: "Deaths in " + state + " by county",
           fill: false,
-          backgroundColor: "rgb(240, 0, 60)",
+          borderColor: "rgb(240, 0, 60)",
           tension: 0.1,
           responsive: true,
-          maintainAspectRatio: false
-        },
+          maintainAspectRatio: false,
+          backgroundColor: "rgb(163, 0, 54)"
+        }
+        
       ],
     }
 
@@ -113,7 +115,8 @@ btnSelectState.addEventListener('change', function (event) {
         options: {
           responsive: true,
           maintainAspectRatio: false
-        }
+        },
+        borderColor: "rgb(240, 0, 60)"
       });
     } else {
       countyChart.config.data = chart_data;
