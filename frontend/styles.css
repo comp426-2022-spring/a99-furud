@@ -1,12 +1,19 @@
 .chart-container {
     display: block;
-    width: 1350px;
-    height: 600px;
+    max-width: 1350px;
+    max-height: 700px;
+    margin: auto;
+    resize: both;
 }
+
+
 
 body {
     padding: 20px;
-    margin: 5px 0 22px 0;
+    /*margin: 5px 0 22px 0;*/
+    margin: auto;
+    resize: both;
+    max-width: 960px;
     background-color: rgba(123, 175, 212, 0.8);
     text-align: center;
     color: rgb(255, 255, 255);
@@ -21,7 +28,7 @@ body {
     font-weight: 300;
     white-space: normal;
     word-spacing: 0px;
-    display: inline-block;
+   /* display: inline-block;*/
 }
 
 button {
@@ -93,3 +100,4 @@ nav {
     line-height: 50px;
     text-align: center;
 }
+
