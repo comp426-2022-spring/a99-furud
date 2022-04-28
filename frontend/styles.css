@@ -9,6 +9,7 @@
 
 #home {
     position: relative;
+    line-height: 50px;
     top: 30%; 
     right: 50%;
     margin-top: 50px;
