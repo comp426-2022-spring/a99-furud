@@ -4,7 +4,7 @@ const btnTrend = document.getElementById('btnCovidTrend')
 const btnStateTrend = document.getElementById('btnStateTrend')
 
 btnHome.addEventListener('click', function (event) {
-    focusDiv('home')
+    focusDiv(['home', "textBody"])
 })
 
 btnTrend.addEventListener('click', function () {
@@ -16,10 +16,10 @@ btnStateTrend.addEventListener('click', function () {
 })
 
 function focusDiv(div) {
-    divs = ["home", "trend-chart-container", "state-chart-container"]
+    divs = ["home", "trend-chart-container", "state-chart-container", "textBody"]
 
     divs.forEach(element => {
-        if (element != div) {
+        if (!div.includes(element)) {
             document.getElementById(element).style.display = "none";
         } else {
             document.getElementById(element).style.display = "block";

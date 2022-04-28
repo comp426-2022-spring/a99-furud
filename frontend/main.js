@@ -3,7 +3,7 @@
   './dataFromAPI.js'
 */
 
-focusDiv('home')
+btnHome.click()
 
 let info;
 let state;
