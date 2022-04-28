@@ -12,18 +12,32 @@
     <nav>
         <a href="/login">Login</a>
         <a href="/signup">Sign-Up</a>
-        <a href="/logout">Log Out</a>
+        <a href="/logout">Log-Out</a>
     </nav>
+    <p></p>
     <nav>
-        <button id="homenav" type="button">Home</button>
-        <button id="btnCovidTrend">Trend by State</button>
-        <button id="btnStateTrend">Death by age group</button>
+        <button class="pushable" id="homenav" type="button">
+            <span class="frontofbutton" id="homenav">
+                Home
+            </span>
+        </button>
+        <p></p>
+        <button class="pushable" id="btnCovidTrend" type="button">
+            <span class="frontofbutton">
+                Trend by State
+            </span>
+        </button>
+        <button class="pushable" id="btnStateTrend" type="button">
+            <span class="frontofbutton">
+                Death by Age Group
+            </span>
+        </button>
     </nav>
-
+    
     <div id="home">
         <h1>Covid-19 Info Dashboard</h1>
     </div>
-
+    <p></p>
     <div id="trend-chart-container" class="chart-container">
         <label for="choose-state">Choose a State:</label>
         <select name="states" id="states">

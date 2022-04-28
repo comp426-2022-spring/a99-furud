@@ -26,11 +26,49 @@ body {
 
 button {
     font-family: apercu, sans-serif;
-    font-size: 14px;
+    font-size: 22px;
     font-style: normal;
     font-weight: 300;
     white-space: normal;
     word-spacing: 0px;
+}
+
+.pushable {
+    background: #000080;
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+  }
+
+.pushable#homenav {
+    background: hsl(340deg 100% 32%);
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+}
+
+.frontofbutton {
+    display: block;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-size: 1.0rem;
+    background: #1764bd;
+    color: white;
+    transform: translateY(-6px);
+  }
+
+.frontofbutton#homenav {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1.0rem;
+    background: hsl(345deg 100% 47%);
+    color: white;
+    transform: translateY(-6px);
 }
 
 .container {
@@ -45,4 +83,8 @@ button {
     font-size: 46px;
     color: #000080;
     word-spacing: 5px;
+}
+
+nav {
+    word-spacing: 15px;
 }
