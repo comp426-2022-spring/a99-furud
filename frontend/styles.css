@@ -78,6 +78,14 @@ button {
     transform: translateY(-6px);
 }
 
+.pushable:active .frontofbutton {
+    transform: translateY(-2px);
+}
+
+.pushable:active .frontofbutton#homenav {
+    transform: translateY(-2px);
+}
+
 .container {
     padding: 60px;
     background: #4B9CD3;
