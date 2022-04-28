@@ -8,7 +8,7 @@
 }
 
 #home {
-    position: absolute;
+    position: relative;
     top: 30%; 
     right: 50%;
     padding: 0px;
