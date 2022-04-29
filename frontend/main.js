@@ -11,7 +11,7 @@ let chart;
 let countyChart;
 let ageChart;
 let age_group;
-let months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
 const btnSelectState = document.getElementById('states')
 
@@ -29,7 +29,8 @@ btnSelectState.addEventListener('change', function (event) {
     let cases = [];
 
     info.forEach((element) => {
-      dates.push(formatDate(element["submission_date"].split('T')[0]));
+      // dates.push(formatDate(element["submission_date"].split('T')[0]));
+      dates.push(element["submission_date"]);
       deaths.push(element["tot_death"]);
       cases.push(element["new_case"])
     });
@@ -65,68 +66,76 @@ btnSelectState.addEventListener('change', function (event) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+
           scales: {
-            x: {
-              maxticksLimit: 1
+            xAxes: [{
+              type: 'time'
+            }]
           },
-            y: {
-              min: 0,
-              max: 100000
+
+          tooltips: {
+            callbacks: {
+              title: function(t, d) {
+                return formatDate(t[0].xLabel.split('T')[0])
+              }
             }
-          },
-          tension: 1
-        }
-      });
-    } else {
-      chart.config.data = chart_data;
-      chart.update()
-    }
-  });
-
-  covidbyCounty(state).then((info) => {
-
-    let county = [];
-    let deaths = [];
-
-    info.forEach((element) => {
-      county.push(element["county_name"]);
-      deaths.push(element["covid_death"]);
-    });
-
-    var covid_by_county = document.getElementById("county-chart").getContext("2d");
-
-    let chart_data = {
-      labels: county,
-      datasets: [
-        {
-          data: deaths,
-          label: "Deaths in " + state + " by county",
-          fill: false,
-          borderColor: "rgb(240, 0, 60)",
-          tension: 0.1,
-          responsive: true,
-          maintainAspectRatio: false,
-          backgroundColor: "rgb(163, 0, 54)"
-        }
-        
-      ],
-    }
-
-    if (countyChart == undefined) {
-      countyChart = new Chart(covid_by_county, {
-        type: "bar",
-        data: chart_data,
-        options: {
-          responsive: true,
-          maintainAspectRatio: false
+          }
         },
-        borderColor: "rgb(240, 0, 60)"
+
+        tension: 1
       });
-    } else {
-      countyChart.config.data = chart_data;
-      countyChart.update()
-    }
+} else {
+  chart.config.data = chart_data;
+  chart.update()
+}
   });
+
+covidbyCounty(state).then((info) => {
+
+  console.log('info', info)
+
+  let county = [];
+  let deaths = [];
+
+  info.forEach((element) => {
+    county.push(element["county_name"]);
+    deaths.push(element["MAX(covid_death)"]);
+  });
+
+  var covid_by_county = document.getElementById("county-chart").getContext("2d");
+
+  let chart_data = {
+    labels: county,
+    datasets: [
+      {
+        data: deaths,
+        label: "Deaths in " + state + " by county",
+        fill: false,
+        borderColor: "rgb(240, 0, 60)",
+        tension: 0.1,
+        responsive: true,
+        maintainAspectRatio: false,
+        backgroundColor: "rgb(163, 0, 54)"
+      }
+
+    ],
+  }
+
+  if (countyChart == undefined) {
+    countyChart = new Chart(covid_by_county, {
+      type: "bar",
+      data: chart_data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      },
+      borderColor: "rgb(240, 0, 60)"
+    });
+  } else {
+    countyChart.config.data = chart_data;
+    countyChart.update()
+  }
+});
 });
 
 
@@ -141,13 +150,13 @@ btnSelectState2.addEventListener('change', regenerate_chart)
 
 // TODO: plot the data for each sex with different lines on the same chart
 function regenerate_chart() {
-  
+
   let states = document.getElementById('states-2')
   let ages = document.getElementById("ages")
 
   state = states.options[states.selectedIndex].text;
   // age_group = ages.options[ages.selectedIndex].value;
- 
+
   // console.log('state', state)
 
   covidBySex(state, "All Sexes", "All Ages").then((info) => {
@@ -159,7 +168,7 @@ function regenerate_chart() {
       deaths.push(element["covid_19_deaths"]);
     });
 
-    let chart_data =  {
+    let chart_data = {
       labels: age_groups,
       datasets: [
         {
@@ -174,7 +183,7 @@ function regenerate_chart() {
     }
 
     var covid_by_sex = document.getElementById("state-chart").getContext("2d");
-    
+
     if (ageChart == undefined) {
       ageChart = new Chart(covid_by_sex, {
         type: "doughnut",
@@ -196,14 +205,14 @@ function formatDate(date) {
   let date_arr = date.split('-')
   let month = months[Number(date_arr[1]) - 1];
 
-  return month + " " + String(date_arr[0])
+  return String(date_arr[2]) + " " + month + " " + String(date_arr[0])
 }
 
-function getColors(length){
+function getColors(length) {
   let pallet = ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9", "#FFDC00", "#001f3f", "#39CCCC", "#01FF70", "#85144b", "#F012BE", "#3D9970", "#111111", "#AAAAAA"];
   let colors = [];
 
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     colors.push(pallet[i % (pallet.length - 1)]);
   }
 

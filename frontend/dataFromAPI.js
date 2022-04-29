@@ -61,9 +61,11 @@ async function covidBySex(state="United States", sex="All Sexes", age="All Ages"
       OR age_group = '40-49 years'
       OR age_group = '50-64 years'
       OR age_group = '65-74 years'
-      OR age_group = '75-84 years')
+      OR age_group = '75-84 years'
+      OR age_group = '85 years and over' 
+      )
       GROUP BY age_group`],
-      order: "covid_19_deaths"
+      order: "age_group"
     };
     
     const trend = await getData(url, data);
@@ -86,8 +88,8 @@ async function covidbyCounty(state=[]) {
   try {
     let data = {
       name: "covid_deaths_by_county",
-      cols: ["county_name", "covid_death"],
-      paras: (state.length == 0 ? []: ["state_name='" + state + "'"]),
+      cols: ["county_name", "MAX(covid_death)"],
+      paras: (state.length == 0 ? []: ["state_name='" + state + "' GROUP BY county_name"]),
       order: "covid_death DESC"
     };
 
