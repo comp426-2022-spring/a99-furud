@@ -34,14 +34,6 @@ const server = app.listen(port, (req, res) => {
   console.log(`App listening on port ${port}`);
 });
 
-app.get("/covid_deaths/", (req, res) => {
-  res.status(200).send("OK");
-});
-
-app.get("/db_populate.js", (req, res) => {
-  res.status(200).send(db_populate.covid_deaths_db());
-});
-
 app.get("/update/:table", (req, res) => {
   if (req.params.table == "all") {
     res.status(200).send(db.update_database());
