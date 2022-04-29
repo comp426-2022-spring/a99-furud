@@ -90,3 +90,216 @@ And that is about all you need to get started.
 All the rest of the assignment instructions are available at: https://comp426.johndmart.in/a/99
 
 Good skill and be creative!
+
+# API Documentation
+
+## Endpoints
+
+### /app/ (GET)
+
+#### Request cURL
+
+```
+curl http://localhost:3000/app/
+```
+
+#### Response body
+
+```
+{"message":"200 OK"}
+```
+
+#### Response headers
+
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 35
+ETag: W/"23-KNmhzXgQhtEE5ovS3fuLixylNK0"
+Date: Thu, 07 Apr 2022 15:07:49 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+```
+
+### /update/:table (GET)
+
+#### Request cURL
+
+```
+curl http://localhost:3000/update/{table name}
+```
+
+#### Response body
+
+```
+{"message": "200"}
+```
+
+#### Response headers
+
+```
+
+```
+
+### /get_data/ (POST)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /login/ (GET)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /loggedin/ (GET)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /auth/ (POST)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /signup/ (GET)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /signup_conf/ (POST)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /delete_acc/ (GET)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /delete_conf/ (POST)
+
+_Not yet implemented_
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
