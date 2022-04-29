@@ -52,7 +52,8 @@ btnSelectState.addEventListener('change', function (event) {
           data: cases,
           label: "New cases",
           fill: true,
-          borderColor: "rgb(0, 0, 128)"
+          borderColor: "rgb(0, 0, 128)",
+          tension: 1,
         }
       ],
     }
@@ -65,6 +66,9 @@ btnSelectState.addEventListener('change', function (event) {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
+            x: {
+              maxticksLimit: 1
+          },
             y: {
               min: 0,
               max: 100000
