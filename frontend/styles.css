@@ -63,6 +63,7 @@ body {
     /*display: inline-block;*/
 }
 
+/**** Button stuff ****/
 button {
     font-family: apercu, sans-serif;
     font-size: 22px;
@@ -118,6 +119,7 @@ button {
 .pushable:active .frontofbutton#homenav {
     transform: translateY(-2px);
 }
+/**** Button stuff ****/
 
 .container {
     padding: 60px;
@@ -126,7 +128,12 @@ button {
     border-radius: 40%;
     margin: auto;
    /* resize: both;*/
-   width: 200px;
+    width: 200px;
+}
+
+#state-chart-container {
+    position: relative;
+    top: -60px;
 }
 
 .bigboi {
