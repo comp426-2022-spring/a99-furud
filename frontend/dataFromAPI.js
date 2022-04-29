@@ -13,13 +13,13 @@ async function covidOverTime(state=[]) {
     let data = {
       name: "covid_deaths_over_time",
       cols: ["submission_date", "tot_death", "new_case"],
-      paras: (state.length == 0 ? []: ["state='" + state + `' AND 
+      paras: (state.length == 0 ? []: ["state='" + state + `' AND new_case>-1 AND
       new_case NOT IN 
       (
           SELECT new_case
           FROM covid_deaths_over_time
           ORDER BY new_case DESC
-          LIMIT 100
+          LIMIT 10
       )`
     ]), // filter extremes
       order: "submission_date"
