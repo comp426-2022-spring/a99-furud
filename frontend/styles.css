@@ -137,6 +137,11 @@ button {
     top: -60px;
 }
 
+#cases-chart-container {
+    position: relative;
+    top: -60px;
+}
+
 .bigboi {
     font-weight: bold;
     font-size: 46px;

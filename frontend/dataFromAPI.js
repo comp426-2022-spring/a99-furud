@@ -1,7 +1,7 @@
 // const button = document.getElementById("button");
 // button.addEventListener("click", covidOverTime);
 
-async function covidOverTime(state=[]) {
+async function covidOverTime(state=[], cols=[]) {
   // event.preventDefault();
 
   const endpoint = "get_data";
@@ -12,8 +12,8 @@ async function covidOverTime(state=[]) {
   try {
     let data = {
       name: "covid_deaths_over_time",
-      cols: ["submission_date", "tot_death", "new_case"],
-      paras: (state.length == 0 ? []: ["state='" + state + `' AND new_case>-1 AND
+      cols: cols, //["submission_date", "tot_death", "new_case"],
+      paras: (state.length == 0 ? []: ["state='" + state + (!cols.includes('new_case') ? "'" : `' AND new_case>-1 AND
       new_case NOT IN 
       (
           SELECT new_case
@@ -21,6 +21,7 @@ async function covidOverTime(state=[]) {
           ORDER BY new_case DESC
           LIMIT 10
       )`
+      )
     ]), // filter extremes
       order: "submission_date"
     };

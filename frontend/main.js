@@ -7,7 +7,9 @@ btnHome.click()
 
 let info;
 let state;
+let state_cases;
 let chart;
+let chart_cases;
 let countyChart;
 let ageChart;
 let age_group;
@@ -22,7 +24,7 @@ btnSelectState.addEventListener('change', function (event) {
   state = this.options[this.selectedIndex].value;
   console.log('state', state)
 
-  covidOverTime(state).then((info) => {
+  covidOverTime(state, ["submission_date", "tot_death"]).then((info) => {
 
     let dates = [];
     let deaths = [];
@@ -32,7 +34,7 @@ btnSelectState.addEventListener('change', function (event) {
       // dates.push(formatDate(element["submission_date"].split('T')[0]));
       dates.push(element["submission_date"]);
       deaths.push(element["tot_death"]);
-      cases.push(element["new_case"])
+      // cases.push(element["new_case"])
     });
 
     var covid_over_time = document.getElementById("trend-chart").getContext("2d");
@@ -44,17 +46,10 @@ btnSelectState.addEventListener('change', function (event) {
           data: deaths,
           label: "Total Covid-19 Deaths in " + state,
           fill: false,
-          borderColor: "rgb(163, 0, 54)",
+          borderColor: "rgb(240, 0, 60)",
           tension: 0.1,
           responsive: true,
           maintainAspectRatio: false
-        },
-        {
-          data: cases,
-          label: "New cases",
-          fill: true,
-          borderColor: "rgb(0, 0, 128)",
-          tension: 1,
         }
       ],
     }
@@ -75,7 +70,7 @@ btnSelectState.addEventListener('change', function (event) {
 
           tooltips: {
             callbacks: {
-              title: function(t, d) {
+              title: function (t, d) {
                 return formatDate(t[0].xLabel.split('T')[0])
               }
             }
@@ -84,58 +79,58 @@ btnSelectState.addEventListener('change', function (event) {
 
         tension: 1
       });
-} else {
-  chart.config.data = chart_data;
-  chart.update()
-}
+    } else {
+      chart.config.data = chart_data;
+      chart.update()
+    }
   });
 
-covidbyCounty(state).then((info) => {
+  covidbyCounty(state).then((info) => {
 
-  console.log('info', info)
+    console.log('info', info)
 
-  let county = [];
-  let deaths = [];
+    let county = [];
+    let deaths = [];
 
-  info.forEach((element) => {
-    county.push(element["county_name"]);
-    deaths.push(element["MAX(covid_death)"]);
-  });
-
-  var covid_by_county = document.getElementById("county-chart").getContext("2d");
-
-  let chart_data = {
-    labels: county,
-    datasets: [
-      {
-        data: deaths,
-        label: "Deaths in " + state + " by county",
-        fill: false,
-        borderColor: "rgb(240, 0, 60)",
-        tension: 0.1,
-        responsive: true,
-        maintainAspectRatio: false,
-        backgroundColor: "rgb(163, 0, 54)"
-      }
-
-    ],
-  }
-
-  if (countyChart == undefined) {
-    countyChart = new Chart(covid_by_county, {
-      type: "bar",
-      data: chart_data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      },
-      borderColor: "rgb(240, 0, 60)"
+    info.forEach((element) => {
+      county.push(element["county_name"]);
+      deaths.push(element["MAX(covid_death)"]);
     });
-  } else {
-    countyChart.config.data = chart_data;
-    countyChart.update()
-  }
-});
+
+    var covid_by_county = document.getElementById("county-chart").getContext("2d");
+
+    let chart_data = {
+      labels: county,
+      datasets: [
+        {
+          data: deaths,
+          label: "Deaths in " + state + " by county",
+          fill: false,
+          borderColor: "rgb(255,69,0)",
+          tension: 0.1,
+          responsive: true,
+          maintainAspectRatio: false,
+          backgroundColor: "rgb(163, 0, 54)"
+        }
+
+      ],
+    }
+
+    if (countyChart == undefined) {
+      countyChart = new Chart(covid_by_county, {
+        type: "bar",
+        data: chart_data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        borderColor: "rgb(240, 0, 60)"
+      });
+    } else {
+      countyChart.config.data = chart_data;
+      countyChart.update()
+    }
+  });
 });
 
 
@@ -200,6 +195,99 @@ function regenerate_chart() {
     }
   });
 };
+
+const btnSelectState3 = document.getElementById('states-3')
+
+btnSelectState3.addEventListener('change', function (event) {
+
+  event.preventDefault();
+
+  state_cases = this.options[this.selectedIndex].value;
+
+  covidOverTime(state_cases, ["submission_date", "tot_cases", "new_case"]).then((info) => {
+
+    let dates = [];
+    let tot_cases = [];
+    let new_cases = [];
+
+    info.forEach((element) => {
+      dates.push(element["submission_date"]);
+      tot_cases.push(element["tot_cases"]);
+      new_cases.push(element["new_case"])
+    });
+
+    let cases_over_time = document.getElementById("cases-chart").getContext("2d");
+
+    let chart_data = {
+      labels: dates,
+      datasets: [
+        {
+          data: tot_cases,
+          yAxisID: "total",
+          label: "Total Covid-19 Cases in " + state_cases,
+          fill: false,
+          borderColor: "rgb(240, 10, 10)",
+          tension: 0.1,
+          responsive: true,
+          maintainAspectRatio: false
+        },
+        {
+          data: new_cases,
+          yAxisID: "new",
+          label: "New cases",
+          fill: false,
+          borderColor: "rgb(85, 107, 47)",
+          tension: 1,
+        }
+      ],
+    }
+
+    if (chart_cases == undefined) {
+      chart_cases = new Chart(cases_over_time, {
+        type: "line",
+        data: chart_data,
+        options: {
+          responsive: true,
+          // maintainAspectRatio: false,
+
+          scales: {
+            xAxes: [{
+              type: 'time'
+            }], 
+            yAxes: [{
+                id: 'total',
+                type: 'linear',
+                position: 'left',
+              }, {
+                id: 'new',
+                type: 'linear',
+                position: 'right',
+                
+                gridLines: {
+                  display: false // only want the grid lines for one axis to show up
+                },
+            }]
+
+          },
+
+          tooltips: {
+            callbacks: {
+              title: function (t, d) {
+                return formatDate(t[0].xLabel.split('T')[0])
+              }
+            }
+          }
+        },
+
+        tension: 1
+      });
+    } else {
+      chart_cases.config.data = chart_data;
+      chart_cases.update()
+    }
+  });
+});
+
 
 function formatDate(date) {
   let date_arr = date.split('-')
