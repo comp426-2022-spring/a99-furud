@@ -1,11 +1,12 @@
 .chart-container {
     display: block;
     max-width: 1350px;
-    
     max-height: 700px;
     margin: auto;
     resize: both;
 }
+
+
 
 #home {
     position: relative;
