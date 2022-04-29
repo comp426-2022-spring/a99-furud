@@ -22,7 +22,6 @@ btnSelectState.addEventListener('change', function (event) {
   event.preventDefault();
 
   state = this.options[this.selectedIndex].value;
-  console.log('state', state)
 
   covidOverTime(state, ["submission_date", "tot_death"]).then((info) => {
 
@@ -31,10 +30,8 @@ btnSelectState.addEventListener('change', function (event) {
     let cases = [];
 
     info.forEach((element) => {
-      // dates.push(formatDate(element["submission_date"].split('T')[0]));
       dates.push(element["submission_date"]);
       deaths.push(element["tot_death"]);
-      // cases.push(element["new_case"])
     });
 
     var covid_over_time = document.getElementById("trend-chart").getContext("2d");
@@ -87,8 +84,6 @@ btnSelectState.addEventListener('change', function (event) {
 
   covidbyCounty(state).then((info) => {
 
-    console.log('info', info)
-
     let county = [];
     let deaths = [];
 
@@ -140,19 +135,14 @@ const btnAgeGroupChart = document.getElementById('btnStateTrend')
 
 btnAgeGroupChart.addEventListener('click', regenerate_chart)
 btnSelectState2.addEventListener('change', regenerate_chart)
-// btnSelectAge.addEventListener('change', regenerate_chart)
 
 
-// TODO: plot the data for each sex with different lines on the same chart
 function regenerate_chart() {
 
   let states = document.getElementById('states-2')
   let ages = document.getElementById("ages")
 
   state = states.options[states.selectedIndex].text;
-  // age_group = ages.options[ages.selectedIndex].value;
-
-  // console.log('state', state)
 
   covidBySex(state, "All Sexes", "All Ages").then((info) => {
     let age_groups = [];
@@ -184,9 +174,7 @@ function regenerate_chart() {
         type: "doughnut",
         data: chart_data,
         options: {
-          responsive: true,
-          /*maintainAspectRatio: false*/
-
+          responsive: true
         }
       });
     } else {
@@ -248,8 +236,6 @@ btnSelectState3.addEventListener('change', function (event) {
         data: chart_data,
         options: {
           responsive: true,
-          // maintainAspectRatio: false,
-
           scales: {
             xAxes: [{
               type: 'time'

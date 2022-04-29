@@ -1,28 +1,23 @@
-// const button = document.getElementById("button");
-// button.addEventListener("click", covidOverTime);
-
-async function covidOverTime(state=[], cols=[]) {
-  // event.preventDefault();
+async function covidOverTime(state = [], cols = []) {
 
   const endpoint = "get_data";
   const url = document.baseURI + endpoint;
 
-  console.log(url);
-
   try {
     let data = {
       name: "covid_deaths_over_time",
-      cols: cols, //["submission_date", "tot_death", "new_case"],
-      paras: (state.length == 0 ? []: ["state='" + state + (!cols.includes('new_case') ? "'" : `' AND new_case>-1 AND
-      new_case NOT IN 
-      (
+      cols: cols,
+      paras: (state.length == 0 ? [] : ["state='" + state + (!cols.includes('new_case') ? "'" : `' 
+        AND new_case>-1 
+        AND new_case NOT IN 
+        (
           SELECT new_case
           FROM covid_deaths_over_time
           ORDER BY new_case DESC
           LIMIT 10
-      )`
-      )
-    ]), // filter extremes
+        )`
+      ) // filter extremes
+      ]),
       order: "submission_date"
     };
 
@@ -35,40 +30,31 @@ async function covidOverTime(state=[], cols=[]) {
   }
 }
 
-async function covidBySex(state="United States", sex="All Sexes", age="All Ages") {
-  // event.preventDefault();
-
-  // const age_groups = {
-  //   "0-17 years" : ["0-17 years"],
-  //   "18-44 years" : ["18-29 years", "30-39 years", "35-44 years"],
-  //   "44-64 years" : ["45-54 years", "55-64 years"],
-  //   "65-84 years" : ["65-74 years", "75-84 years"],
-  //   "85 years and over": ["85 years and over"]
-  // }
+async function covidBySex(state = "United States", sex = "All Sexes", age = "All Ages") {
 
   const endpoint = "get_data";
   const url = document.baseURI + endpoint;
-
-  console.log(url);
 
   try {
     let data = {
       name: "covid_deaths_by_sex",
       cols: ["age_group", "covid_19_deaths"],
-      paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group<>'${age}' AND "group" = 'By Total' AND 
-      (age_group = '0-17 years' 
-      OR age_group = '18-29 years'
-      OR age_group = '30-39 years'
-      OR age_group = '40-49 years'
-      OR age_group = '50-64 years'
-      OR age_group = '65-74 years'
-      OR age_group = '75-84 years'
-      OR age_group = '85 years and over' 
-      )
-      GROUP BY age_group`],
+      paras: ["state='" + state + "' AND sex='" + sex + `' AND age_group<>'${age}' AND "group" = 'By Total' 
+        AND (
+          age_group = '0-17 years' 
+          OR age_group = '18-29 years'
+          OR age_group = '30-39 years'
+          OR age_group = '40-49 years'
+          OR age_group = '50-64 years'
+          OR age_group = '65-74 years'
+          OR age_group = '75-84 years'
+          OR age_group = '85 years and over' 
+        )
+        GROUP BY age_group`
+      ],
       order: "age_group"
     };
-    
+
     const trend = await getData(url, data);
     return trend;
 
@@ -78,19 +64,16 @@ async function covidBySex(state="United States", sex="All Sexes", age="All Ages"
   }
 }
 
-async function covidbyCounty(state=[]) {
-  // event.preventDefault();
+async function covidbyCounty(state = []) {
 
   const endpoint = "get_data";
   const url = document.baseURI + endpoint;
-
-  console.log(url);
 
   try {
     let data = {
       name: "covid_deaths_by_county",
       cols: ["county_name", "MAX(covid_death)"],
-      paras: (state.length == 0 ? []: ["state_name='" + state + "' GROUP BY county_name"]),
+      paras: (state.length == 0 ? [] : ["state_name='" + state + "' GROUP BY county_name"]),
       order: "covid_death DESC"
     };
 
@@ -104,16 +87,15 @@ async function covidbyCounty(state=[]) {
 }
 
 async function getData(url, data) {
-    const options = {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-  
-    console.log("options", options);
-    const response = await fetch(url, options);
-    return response.json();
-  }
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  };
+
+  const response = await fetch(url, options);
+  return response.json();
+}

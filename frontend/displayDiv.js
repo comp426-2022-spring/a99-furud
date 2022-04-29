@@ -1,4 +1,3 @@
-
 const btnHome = document.getElementById('homenav')
 const btnTrend = document.getElementById('btnCovidTrend')
 const btnStateTrend = document.getElementById('btnStateTrend')
