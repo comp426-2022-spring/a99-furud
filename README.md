@@ -284,8 +284,6 @@ curl http://localhost:3000/update/{table name}
 
 ### /delete_conf/ (POST)
 
-_Not yet implemented_
-
 #### Request cURL
 
 ```
