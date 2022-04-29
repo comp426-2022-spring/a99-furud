@@ -17,7 +17,6 @@ function getData(tbl_name, cols=[], paras=[], order_column) {
 
     sql += " ORDER BY " + order_column
     sql = sql + ";";
-    console.log(sql)
     ret = db.prepare(sql).all();
     return ret;
 }
