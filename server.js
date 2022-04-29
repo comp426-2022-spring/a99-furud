@@ -45,8 +45,11 @@ app.get("/update/:table", (req, res) => {
 app.get('/logout', (req, res) => {
   if (req.session.loggedin) {
     req.session.loggedin = false;
+    res.status(200).sendFile(__dirname + '/frontend/loggedout.html')
   }
-  res.redirect('/')
+  else {
+    res.redirect('/')
+  }
 })
 
 app.post("/get_data/", (req, res) => {
