@@ -1,6 +1,9 @@
-Project Goal
+Stages:
+- Backend (SQLite and db management)
+- HTML to build each page 
+- CSS 
 
-Create a dashboard with options to view COVID data trends. 
+Project Goal: Create a dashboard with options to view COVID data trends. 
 
 Include:
 - Select state and view cases/100k compared to national average 
