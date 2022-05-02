@@ -1,0 +1,33 @@
+- data
+  - db
+    - database.db - contains all covid-19 data tables fetched from data.cdc.gov
+    - users.db - stores data for registered users
+  - log
+    - access.log - api access logs
+    - log.db - database of api access logs
+    - user_data.db - database of api access logs for registered users
+- frontend
+  - main.js - generates charts
+  - dataFromAPI.js - fetches covid-19 data from backend endpoints (server.js)
+  - displayDiv.js - hides/shows html elements when displaying charts
+  - index.html - homepage and charts display page
+  - login.html - login page with username and password prompts
+  - signup.html - account creation webpage
+  - loggedin.html - login confirmation webpage
+  - loggedout.html - logout confirmation webpage
+  - delete_acc.html - account deletion webpage with username and password prompts
+  - styles.css - CSS styling for all webpages
+- src
+  - assets
+    - homepage.JPG - picture of homepage
+  - middleware
+    - logger.js - logs user interactions to access.log
+  - services
+    - logging_db.js - logs user interactions to log.db and user_data.db
+  - data.js - SQL query generator
+  - populate_db.js - creates database.db and updates tables when project is run      
+  - users.js - creates users.db, handles user creation, deletion, and authentication
+- node_modules - contains modules used by the project
+- package-lock.json
+- package.json - contains run configuration, module information, and dependencies list
+- server.js - contains all front end and back end api endpoints
