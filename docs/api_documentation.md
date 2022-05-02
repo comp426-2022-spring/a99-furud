@@ -1,7 +1,7 @@
 
 # API Documentation
 
-## Endpoints
+## Testing Endpoint
 
 ### /app/ (GET)
 
@@ -29,6 +29,8 @@ Date: Thu, 07 Apr 2022 15:07:49 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 ```
+
+## Back End Endpoints
 
 ### /update/:table (GET)
 
@@ -66,7 +68,7 @@ curl -d "name='{table name}'&cols=[]&paras=[]$order=''" http://localhost:3000/ge
 #### Response body
 
 ```
-
+{"message": "200"}
 ```
 
 #### Response headers
@@ -83,6 +85,8 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 ```
 
+## Front End Endpoints
+
 ### /login/ (GET)
 
 #### Request cURL
@@ -94,7 +98,7 @@ curl http://localhost:3000/login/
 #### Response body
 
 ```
-
+*login webpage*
 ```
 
 #### Response headers
@@ -122,7 +126,7 @@ curl http://localhost:3000/loggedin/
 #### Response body
 
 ```
-
+*logged in confirmation webpage*
 ```
 
 #### Response headers
@@ -152,7 +156,7 @@ curl -d "username=JohnDoe%pass=password" http://localhost:3000/auth
 #### Response body
 
 ```
-"Found. Redirecting to /login"
+{"message": "Found. Redirecting to /login"}
 ```
 
 #### Response headers
@@ -180,36 +184,7 @@ curl http://localhost:3000/signup/
 #### Response body
 
 ```
-<!DOCTYPE html>
-<html>
-    <div class="bigboi">
-        <head>
-            <link rel="stylesheet" href="./styles.css">
-            <title>Sign Up</title>
-            A99 - Furud Sign-up Page
-            <hr>
-        </head>
-    </div>
-    <body>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
-            <p><p></p></p>
-        </nav>
-        <form action="/signup_conf" method="post">
-            <div class="container">
-                Username:<br>
-                <input type="text" name="username" id="username" placeholder="Username" required><br><br>
-                Password:<br>
-                <input type="password" name="pass" id="pass" placeholder="Password" required><br><br>
-
-                <input type="submit" value="Register">
-            </div>
-        </form>
-        </form> <p><p></p></p>
-
-    </body>
-</html>
+*signup webpage*
 ```
 
 #### Response headers
@@ -239,7 +214,7 @@ curl -d "username=JohnDe%pass=password" http://localhost:3000/signup_conf/
 #### Response body
 
 ```
-*
+*signup confirmation webpage*
 ```
 
 #### Response headers
@@ -261,19 +236,27 @@ Keep-Alive: timeout=5
 #### Request cURL
 
 ```
-
+curl http://localhost:3000/delete_acc
 ```
 
 #### Response body
 
 ```
-
+*delete account confirmation webpage*
 ```
 
 #### Response headers
 
 ```
-
+HTTP/1.1 304 Not Modified
+X-Powered-By: Express
+Accept-Ranges: bytes
+Cache-Control: public, max-age=0
+Last-Modified: Thu, 28 Apr 2022 15:44:37 GMT
+ETag: W/"475-18070d87bbd"
+Date: Mon, 02 May 2022 03:30:24 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 ```
 
 ### /delete_conf/ (POST)
@@ -281,17 +264,25 @@ Keep-Alive: timeout=5
 #### Request cURL
 
 ```
-
+curl -d "username=JohnDoe&pass=password" http://localhost:3000/delete_conf/ 
 ```
 
 #### Response body
 
 ```
-
+{"message": "200"}
 ```
 
 #### Response headers
 
 ```
-
+HTTP/1.1 304 Not Modified
+X-Powered-By: Express
+Accept-Ranges: bytes
+Cache-Control: public, max-age=0
+Last-Modified: Thu, 28 Apr 2022 15:53:16 GMT
+ETag: W/"475-18070d87bbd"
+Date: Mon, 02 May 2022 03:35:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
 ```
