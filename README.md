@@ -1,4 +1,4 @@
-# a99 Final Project
+# Status Quovid
 
 ![App Homepage](https://github.com/comp426-2022-spring/a99-furud/blob/main/src/assets/homepage.JPG)
 
@@ -16,7 +16,7 @@ An easy-to-use Covid-19 dashboard. Users can log in and see up-to-date graphs of
 
 ## Links
 
-- [API Documentation](https://github.com/comp426-2022-spring/a99-furud/blob/main/docs/api_documentation.md)
+- [Full API Documentation](https://github.com/comp426-2022-spring/a99-furud/blob/main/docs/api_documentation.md)
 - [Covid-19 Data Sources](https://github.com/comp426-2022-spring/a99-furud/blob/main/docs/cdc_apis.txt)
 - [Project Structure Info](https://github.com/comp426-2022-spring/a99-furud/blob/main/docs/project_structure.md)
 - [Project Planning](https://github.com/comp426-2022-spring/a99-furud/blob/main/docs/planning.txt)
