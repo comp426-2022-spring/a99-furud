@@ -34,6 +34,10 @@ const server = app.listen(port, (req, res) => {
   console.log(`App listening on port ${port}`);
 });
 
+app.get('/app', (req, res) => {
+  res.status(200).send("OK")
+})
+
 app.get("/update/:table", (req, res) => {
   if (req.params.table == "all") {
     res.status(200).send(db.update_database());
